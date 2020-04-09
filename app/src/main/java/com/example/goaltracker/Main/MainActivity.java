@@ -1,8 +1,10 @@
-package com.example.goaltracker;
+package com.example.goaltracker.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.goaltracker.R;
 
 public class MainActivity extends AppCompatActivity {
 
