@@ -6,4 +6,5 @@
     <color name="contact_name">#333333</color>
     <color name="contact_number">#8c8c8c</color>
     <color name="black">#8c8c8c</color>
+    <color name="bg_row_background">#fa315b</color>
 </resources>

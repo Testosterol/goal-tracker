@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.goaltracker.R;
 
@@ -30,7 +31,7 @@ public class MainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Button todoListButton;
+    private ImageButton todoListButton, goalsButton, statisticsButton, settingsButton;
 
     public MainFragment() {
         // Required empty public constructor
@@ -74,14 +75,9 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        todoListButton = view.findViewById(R.id.toDoListButton);
+        todoListButton = view.findViewById(R.id.toDoList);
 
-        todoListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_toDoListFragment);
-            }
-        });
+        todoListButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_toDoListFragment));
 
     }
 }
