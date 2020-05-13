@@ -1,19 +1,31 @@
 package com.example.goaltracker.Main;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.goaltracker.R;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 
 /**
@@ -76,8 +88,34 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         todoListButton = view.findViewById(R.id.toDoList);
+        goalsButton = view.findViewById(R.id.goals);
+        statisticsButton = view.findViewById(R.id.statistics);
+        settingsButton = view.findViewById(R.id.settings);
+
+        Toolbar myToolbar = view.findViewById(R.id.toolbar_main_fragment);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(myToolbar);
+
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle("");
+        setHasOptionsMenu(true);
 
         todoListButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_toDoListFragment));
+        goalsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_goalsFragment));
+        statisticsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_statisticsFragment));
+        settingsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_settingsFragment
+        ));
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NotNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_bar_main_screen, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {// Not implemented here
+            Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_settingsFragment);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

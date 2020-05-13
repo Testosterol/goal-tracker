@@ -1,13 +1,10 @@
 package com.example.goaltracker.ToDoList;
 
-import android.animation.Animator;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,28 +16,20 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
-import android.widget.TimePicker;
 
 import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
@@ -66,22 +55,15 @@ public class ToDoListFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private RecyclerView mRecyclerView;
     private ToDoListAdapter mRecyclerViewAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
 
-    private FloatingActionButton toDoListItemButton;
-    Dialog dialog;
+    private Dialog dialog;
     private EditText toDoListTitle, toDoListDate, toDoListTime;
     private LinedEditText toDoListNotes;
-    private ImageButton addToDoListItem;
     private int mYear, mMonth, mDay;
-    ToDoListViewModel toDoListViewModel;
+    private ToDoListViewModel toDoListViewModel;
 
 
     public ToDoListFragment() {
@@ -109,16 +91,11 @@ public class ToDoListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_to_do_list, container, false);
     }
 
@@ -126,12 +103,10 @@ public class ToDoListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toolbar myToolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = view.findViewById(R.id.toolbar_to_do_list);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(myToolbar);
 
-        myToolbar.setNavigationOnClickListener(v ->{
-            Navigation.findNavController(requireView()).popBackStack();
-        });
+        myToolbar.setNavigationOnClickListener(v ->Navigation.findNavController(requireView()).popBackStack());
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowHomeEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(true);
@@ -145,7 +120,7 @@ public class ToDoListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
 
         toDoListViewModel.init(toDoListViewModel.toDoListDao);
@@ -193,7 +168,7 @@ public class ToDoListFragment extends Fragment {
             toDoListViewModel.filterTextAll.setValue("");
         }
 
-        toDoListItemButton = view.findViewById(R.id.buttonAddToDoItem);
+        FloatingActionButton toDoListItemButton = view.findViewById(R.id.buttonAddToDoItem);
 
         toDoListItemButton.setOnClickListener(v -> inflateToDoListDialog());
 
@@ -202,7 +177,7 @@ public class ToDoListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NotNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.navigation, menu);
+        inflater.inflate(R.menu.action_bar_to_do_list, menu);
 
         SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
 
@@ -245,7 +220,7 @@ public class ToDoListFragment extends Fragment {
             toDoListDate = dialog.findViewById(R.id.toDoListDate);
             toDoListTitle = dialog.findViewById(R.id.toDoListTitle);
             toDoListNotes = dialog.findViewById(R.id.toDoListNotes);
-            addToDoListItem = dialog.findViewById(R.id.toDoListAdd);
+            ImageButton addToDoListItem = dialog.findViewById(R.id.toDoListAdd);
             toDoListTime = dialogView.findViewById(R.id.toDoListTime);
 
             toDoListDate.setFocusable(false);
@@ -257,7 +232,7 @@ public class ToDoListFragment extends Fragment {
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
                         (view, year, monthOfYear, dayOfMonth) -> {
                             String formattedDate = String.format(Locale.ENGLISH, "%02d-%02d-%d", dayOfMonth, (monthOfYear + 1), year);
                             toDoListDate.setText(formattedDate);
