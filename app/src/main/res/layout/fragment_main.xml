@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.MainFragment">
+    tools:context=".Main.MainFragment"
+    app:navGraph="@navigation/navigation">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main_fragment"
@@ -32,7 +33,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/goals"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main_fragment"
-        app:srcCompat="@drawable/ic_to_do_list_black_24dp" />
+        app:srcCompat="@drawable/ic_to_do_list_black_24dp"
+        android:contentDescription="@string/to_do_list" />
 
     <ImageButton
         android:id="@+id/statistics"
@@ -48,7 +50,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/settings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goals" />
+        app:layout_constraintTop_toBottomOf="@+id/goals"
+        android:contentDescription="@string/statistics" />
 
     <ImageButton
         android:id="@+id/goals"
@@ -65,7 +68,8 @@
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main_fragment"
-        app:srcCompat="@drawable/ic_target_goal_black_24dp" />
+        app:srcCompat="@drawable/ic_target_goal_black_24dp"
+        android:contentDescription="@string/goals" />
 
     <ImageButton
         android:id="@+id/settings"
@@ -82,6 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toEndOf="@+id/statistics"
-        app:layout_constraintTop_toBottomOf="@+id/toDoList" />
+        app:layout_constraintTop_toBottomOf="@+id/toDoList"
+        android:contentDescription="@string/settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

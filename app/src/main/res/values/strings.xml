@@ -6,4 +6,15 @@
     <string name="title">Title</string>
     <string name="date">Date</string>
     <string name="notes">Notes</string>
+    <string name="to_do_list">to_do_list</string>
+    <string name="statistics">statistics</string>
+    <string name="goals">goals</string>
+    <string name="settings">settings</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="notes">Notes</string>
+    <string name="title">Title</string>
+    <string name="add">add</string>
+    <string name="create">create</string>
+    <string name="search">search</string>
 </resources>
