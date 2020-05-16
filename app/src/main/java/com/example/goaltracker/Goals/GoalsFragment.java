@@ -1,5 +1,7 @@
 package com.example.goaltracker.Goals;
 
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.goaltracker.R;
 
@@ -84,6 +88,38 @@ public class GoalsFragment extends Fragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle("");
         setHasOptionsMenu(true);
+
+        View dailyGoalsConstraintLayoutView = view.findViewById(R.id.constraintLayout_daily_goals);
+        View weeklyGoalsConstraintLayoutView = view.findViewById(R.id.constraintLayout_weekly_goals);
+        View monthlyGoalsConstraintLayoutView = view.findViewById(R.id.constraintLayout_monthly_goals);
+
+        View dailyGoalsRectangleView = view.findViewById(R.id.rectangle_daily_goals);
+        View weeklyGoalsRectangleView = view.findViewById(R.id.rectangle_weekly_goals);
+        View monthlyGoalsRectangleView = view.findViewById(R.id.rectangle_monthly_goals);
+
+        TextView dailyGoalsTextView = view.findViewById(R.id.daily_goals_TextView_goals_screen);
+        TextView weeklyGoalsTextView = view.findViewById(R.id.weekly_goals_TextView_goals_screen);
+        TextView monthlyGoalsTextView = view.findViewById(R.id.monthly_goals_TextView_goals_screen);
+
+        ImageButton dailyGoalsImageButton = view.findViewById(R.id.daily_goals_image_button_goals_screen);
+        ImageButton weeklyGoalsImageButton = view.findViewById(R.id.weekly_goals_image_button_goals_screen);
+        ImageButton monthlyGoalsImageButton = view.findViewById(R.id.monthly_goals_image_button_goals_screen);
+
+        dailyGoalsConstraintLayoutView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_dailyGoals));
+        weeklyGoalsConstraintLayoutView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_weeklyGoalsFragment));
+        monthlyGoalsConstraintLayoutView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_monthlyGoalsFragment));
+
+        dailyGoalsRectangleView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_dailyGoals));
+        weeklyGoalsRectangleView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_weeklyGoalsFragment));
+        monthlyGoalsRectangleView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_monthlyGoalsFragment));
+
+        dailyGoalsTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_dailyGoals));
+        weeklyGoalsTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_weeklyGoalsFragment));
+        monthlyGoalsTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_monthlyGoalsFragment));
+
+        dailyGoalsImageButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_dailyGoals));
+        weeklyGoalsImageButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_weeklyGoalsFragment));
+        monthlyGoalsImageButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_goalsFragment_to_monthlyGoalsFragment));
     }
 
     @Override

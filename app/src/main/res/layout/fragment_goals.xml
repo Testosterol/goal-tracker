@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Goals.GoalsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -13,14 +13,180 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <com.github.florent37.shapeofview.shapes.RoundRectView
+        android:id="@+id/rectangle_daily_goals"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/rectangle_weekly_goals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
-</FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_goals_fragment"
+        app:shape_roundRect_borderColor="@android:color/black"
+        app:shape_roundRect_borderWidth="2dp"
+        app:shape_roundRect_bottomLeftRadius="10dp"
+        app:shape_roundRect_bottomRightRadius="10dp"
+        app:shape_roundRect_topLeftRadius="10dp"
+        app:shape_roundRect_topRightRadius="10dp">
+
+
+        <!-- YOUR CONTENT -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:id="@+id/constraintLayout_daily_goals">
+
+            <TextView
+                android:id="@+id/daily_goals_TextView_goals_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:contentDescription="@string/daily_goals"
+                android:text="@string/daily_goals"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/daily_goals_image_button_goals_screen"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.508"
+                tools:text="@string/daily_goals" />
+
+            <ImageButton
+                android:id="@+id/daily_goals_image_button_goals_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_goals_daily_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/daily_goals_TextView_goals_screen"
+                app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.github.florent37.shapeofview.shapes.RoundRectView>
+
+    <com.github.florent37.shapeofview.shapes.RoundRectView
+        android:id="@+id/rectangle_weekly_goals"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/rectangle_monthly_goals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle_daily_goals"
+        app:shape_roundRect_borderColor="@android:color/black"
+        app:shape_roundRect_borderWidth="2dp"
+        app:shape_roundRect_bottomLeftRadius="10dp"
+        app:shape_roundRect_bottomRightRadius="10dp"
+        app:shape_roundRect_topLeftRadius="10dp"
+        app:shape_roundRect_topRightRadius="10dp">
+
+
+        <!-- YOUR CONTENT -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:id="@+id/constraintLayout_weekly_goals">
+
+            <TextView
+                android:id="@+id/weekly_goals_TextView_goals_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:contentDescription="@string/daily_goals"
+                android:text="@string/weekly_goals"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/weekly_goals_image_button_goals_screen"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.508"
+                tools:text="@string/weekly_goals" />
+
+            <ImageButton
+                android:id="@+id/weekly_goals_image_button_goals_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_goals_weekly"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/weekly_goals_TextView_goals_screen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.github.florent37.shapeofview.shapes.RoundRectView>
+
+    <com.github.florent37.shapeofview.shapes.RoundRectView
+        android:id="@+id/rectangle_monthly_goals"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle_weekly_goals"
+        app:shape_roundRect_borderColor="@android:color/black"
+        app:shape_roundRect_borderWidth="2dp"
+        app:shape_roundRect_bottomLeftRadius="10dp"
+        app:shape_roundRect_bottomRightRadius="10dp"
+        app:shape_roundRect_topLeftRadius="10dp"
+        app:shape_roundRect_topRightRadius="10dp">
+
+
+        <!-- YOUR CONTENT -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:id="@+id/constraintLayout_monthly_goals">
+
+            <TextView
+                android:id="@+id/monthly_goals_TextView_goals_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:contentDescription="@string/monthly_goals"
+                android:text="@string/weekly_goals"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/monthly_goals_image_button_goals_screen"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.508"
+                tools:text="@string/monthly_goals" />
+
+            <ImageButton
+                android:id="@+id/monthly_goals_image_button_goals_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_goals_monthly"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/monthly_goals_TextView_goals_screen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.github.florent37.shapeofview.shapes.RoundRectView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

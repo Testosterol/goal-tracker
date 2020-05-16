@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.goaltracker.R;
 
@@ -44,6 +45,7 @@ public class MainFragment extends Fragment {
     private String mParam2;
 
     private ImageButton todoListButton, goalsButton, statisticsButton, settingsButton;
+    private TextView todolistTextView, goalsTextView, statisticsTextView, settingsTextView;
 
     public MainFragment() {
         // Required empty public constructor
@@ -91,6 +93,11 @@ public class MainFragment extends Fragment {
         goalsButton = view.findViewById(R.id.goals);
         statisticsButton = view.findViewById(R.id.statistics);
         settingsButton = view.findViewById(R.id.settings);
+        todolistTextView = view.findViewById(R.id.to_do_list_TextView_main_screen);
+        goalsTextView = view.findViewById(R.id.goals_TextView_main_screen);
+        statisticsTextView = view.findViewById(R.id.statistics_TextView_main_screen);
+        settingsTextView = view.findViewById(R.id.settings_TextView_main_screen);
+
 
         Toolbar myToolbar = view.findViewById(R.id.toolbar_main_fragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(myToolbar);
@@ -101,8 +108,11 @@ public class MainFragment extends Fragment {
         todoListButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_toDoListFragment));
         goalsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_goalsFragment));
         statisticsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_statisticsFragment));
-        settingsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_settingsFragment
-        ));
+        settingsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_settingsFragment));
+        todolistTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_toDoListFragment));
+        goalsTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_goalsFragment));
+        statisticsTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_statisticsFragment));
+        settingsTextView.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_settingsFragment));
 
     }
 

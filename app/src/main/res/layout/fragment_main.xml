@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.MainFragment"
-    app:navGraph="@navigation/navigation">
+    app:navGraph="@navigation/navigation"
+    tools:context=".Main.MainFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main_fragment"
@@ -21,72 +21,103 @@
 
     <ImageButton
         android:id="@+id/toDoList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="100dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/settings"
+        android:background="@null"
+        android:contentDescription="@string/to_do_list"
+        app:layout_constraintBottom_toTopOf="@+id/to_do_list_TextView_main_screen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/goals"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main_fragment"
-        app:srcCompat="@drawable/ic_to_do_list_black_24dp"
-        android:contentDescription="@string/to_do_list" />
+        app:layout_constraintVertical_bias="0.51"
+        app:srcCompat="@drawable/ic_to_do_list_main_menu" />
 
     <ImageButton
         android:id="@+id/statistics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="200dp"
-        app:srcCompat="@drawable/ic_statistics_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="60dp"
+        android:background="@null"
+        android:contentDescription="@string/statistics"
+        app:layout_constraintBottom_toTopOf="@+id/statistics_TextView_main_screen"
         app:layout_constraintEnd_toStartOf="@+id/settings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goals"
-        android:contentDescription="@string/statistics" />
+        app:layout_constraintTop_toBottomOf="@+id/goals_TextView_main_screen"
+        app:srcCompat="@drawable/ic_statistics_main_menu" />
 
     <ImageButton
         android:id="@+id/goals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="100dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/statistics"
+        android:background="@null"
+        android:contentDescription="@string/goals"
+        app:layout_constraintBottom_toTopOf="@+id/goals_TextView_main_screen"
         app:layout_constraintEnd_toStartOf="@+id/toDoList"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main_fragment"
-        app:srcCompat="@drawable/ic_target_goal_black_24dp"
-        android:contentDescription="@string/goals" />
+        app:srcCompat="@drawable/ic_goal_main_menu" />
 
     <ImageButton
         android:id="@+id/settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="200dp"
-        app:srcCompat="@drawable/ic_settings_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="60dp"
+        android:background="@null"
+        android:contentDescription="@string/settings"
+        app:layout_constraintBottom_toTopOf="@+id/settings_TextView_main_screen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toEndOf="@+id/statistics"
+        app:layout_constraintTop_toBottomOf="@+id/to_do_list_TextView_main_screen"
+        app:layout_constraintVertical_bias="0.48000002"
+        app:srcCompat="@drawable/ic_settings_main_menu" />
+
+    <TextView
+        android:id="@+id/goals_TextView_main_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goals"
+        app:layout_constraintBottom_toTopOf="@+id/statistics"
+        app:layout_constraintEnd_toStartOf="@+id/toDoList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goals"
+        tools:text="Goals"/>
+
+    <TextView
+        android:id="@+id/to_do_list_TextView_main_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/to_do_list"
+        app:layout_constraintBottom_toTopOf="@+id/settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/goals"
         app:layout_constraintTop_toBottomOf="@+id/toDoList"
-        android:contentDescription="@string/settings" />
+        tools:text="To do list" />
+
+    <TextView
+        android:id="@+id/statistics_TextView_main_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/statistics"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics"
+        tools:text="Statistics"/>
+
+    <TextView
+        android:id="@+id/settings_TextView_main_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/statistics"
+        app:layout_constraintTop_toBottomOf="@+id/settings"
+        tools:text="Settings"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
