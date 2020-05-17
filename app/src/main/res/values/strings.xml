@@ -21,4 +21,6 @@
     <string name="weekly_goals">Weekly Goals</string>
     <string name="monthly_goals_button">monthly goals button</string>
     <string name="monthly_goals">Monthly Goals</string>
+    <string name="goal_name">Goal name</string>
+    <string name="log_type">Log Type</string>
 </resources>

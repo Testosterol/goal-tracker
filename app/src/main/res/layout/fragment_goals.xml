@@ -164,7 +164,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:contentDescription="@string/monthly_goals"
-                android:text="@string/weekly_goals"
+                android:text="@string/monthly_goals"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/monthly_goals_image_button_goals_screen"
