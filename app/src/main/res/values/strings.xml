@@ -23,4 +23,5 @@
     <string name="monthly_goals">Monthly Goals</string>
     <string name="goal_name">Goal name</string>
     <string name="log_type">Log Type</string>
+    <string name="next_day">next_day</string>
 </resources>

@@ -6,18 +6,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Goals.DailyGoalsFragment">
 
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_goals_fragment"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/AppTheme">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageButton
+        android:id="@+id/image_button_toolbar_daily_goals_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/next_day"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_chevron_right_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/image_button_toolbar_daily_goals_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="clip_horizontal"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/next_day"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
 
     <include
         android:id="@+id/include"
@@ -47,6 +81,8 @@
         android:focusable="true"
         android:scaleType="center"
         app:backgroundTint="@color/colorAccent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

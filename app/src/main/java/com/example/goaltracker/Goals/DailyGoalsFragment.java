@@ -1,5 +1,6 @@
 package com.example.goaltracker.Goals;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
@@ -28,6 +29,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -43,8 +46,11 @@ public class DailyGoalsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private Dialog dialog;
     private Spinner goalTypeSpinner1, goalTypeSpinner2;
-    private EditText goalName;
+    private EditText goalName, goalDateFrom, goalDateTo;
     private LinedEditText goalNotes;
+    private ImageButton goalAdd;
+
+    private int mYear, mMonth, mDay, mYear2, mMonth2, mDay2;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -108,24 +114,51 @@ public class DailyGoalsFragment extends Fragment {
             int width = metrics.widthPixels;
             int height = metrics.heightPixels;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Objects.requireNonNull(dialog.getWindow()).setLayout((6 * width) / 7, (4 * height) / 5);
+                Objects.requireNonNull(dialog.getWindow()).setLayout((int) ((6.5 * width) / 7), (int) ((4.5 * height) / 5));
             }
 
             goalName = dialog.findViewById(R.id.goaL_item_name);
             goalNotes = dialog.findViewById(R.id.goals_notes);
+            goalDateFrom = dialog.findViewById(R.id.from_date_goal);
+            goalDateTo = dialog.findViewById(R.id.to_date_goal);
+            goalAdd = dialog.findViewById(R.id.goal_add);
 
-            // spinners
-            // Declaring the String Array with the Text Data for the Spinners
+            goalDateFrom.setOnClickListener(v -> {
+                goalDateFrom.setText("");
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            String formattedDate = String.format(Locale.ENGLISH, "%02d-%02d-%d", dayOfMonth, (monthOfYear + 1), year);
+                            goalDateFrom.setText(formattedDate);
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            });
+
+            goalDateTo.setOnClickListener(v -> {
+                goalDateTo.setText("");
+                final Calendar c = Calendar.getInstance();
+                mYear2 = c.get(Calendar.YEAR);
+                mMonth2 = c.get(Calendar.MONTH);
+                mDay2 = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            String formattedDate = String.format(Locale.ENGLISH, "%02d-%02d-%d", dayOfMonth, (monthOfYear + 1), year);
+                            goalDateTo.setText(formattedDate);
+                        }, mYear2, mMonth2, mDay2);
+                datePickerDialog.show();
+            });
+
 
 
             // Declaring the Integer Array with resourse Id's of Images for the Spinners
-
-
             ArrayList<ListItemAddProg> itemAddProgs = new ArrayList<>();
             itemAddProgs.add(new ListItemAddProg("Goal Type", R.drawable.ic_log_type));
             itemAddProgs.add(new ListItemAddProg("Checkbox", R.drawable.checkbox_spinner1_goal));
             itemAddProgs.add(new ListItemAddProg("Time", R.drawable.time_spinner1_goal));
-            itemAddProgs.add(new ListItemAddProg("Count/Amount", R.drawable.amount_spinner1_goal));
+            itemAddProgs.add(new ListItemAddProg("Count", R.drawable.amount_spinner1_goal));
 
             // Setting a Custom Adapter to the Spinner
             goalTypeSpinner1 = dialog.findViewById(R.id.goal_item_log_type_spinner_1);
@@ -163,6 +196,10 @@ public class DailyGoalsFragment extends Fragment {
                 }
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
+            });
+
+            goalAdd.setOnClickListener(v -> {
+                // add goal to the database
             });
         }
     }
