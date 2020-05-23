@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,17 +20,23 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
 import com.example.goaltracker.Util.LinedEditText;
 import com.example.goaltracker.Util.ListItemAddProg;
 import com.example.goaltracker.Util.Spinner2GoalAdapter;
 import com.example.goaltracker.Util.SpinnerGoalAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -46,9 +53,10 @@ public class DailyGoalsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private Dialog dialog;
     private Spinner goalTypeSpinner1, goalTypeSpinner2;
-    private EditText goalName, goalDateFrom, goalDateTo;
+    private EditText goalName, goalDateFrom, goalDateTo, goalAmount;
+    private TextView goalsTitleBar;
     private LinedEditText goalNotes;
-    private ImageButton goalAdd;
+    private ImageButton goalAdd, goalNextRight, goalPreviousLeft;
 
     private int mYear, mMonth, mDay, mYear2, mMonth2, mDay2;
 
@@ -100,6 +108,28 @@ public class DailyGoalsFragment extends Fragment {
 
         FloatingActionButton toDoListItemButton = view.findViewById(R.id.button_add_goal_item);
         toDoListItemButton.setOnClickListener(v -> inflateToDoListDialog());
+
+        goalNextRight = view.findViewById(R.id.image_button_toolbar_daily_goals_right);
+        goalPreviousLeft = view.findViewById(R.id.image_button_toolbar_daily_goals_left);
+        goalsTitleBar = view.findViewById(R.id.toolbar_daily_goals_title);
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("EEEE dd MMM, yyyy", Locale.ENGLISH);
+        String formattedDate = df.format(c.getTime());
+
+        goalsTitleBar.setText(formattedDate);
+
+        goalNextRight.setOnClickListener(v -> {
+            c.add(Calendar.DATE, +1);
+            String formattedDatee = df.format(c.getTime());
+            goalsTitleBar.setText(formattedDatee);
+        });
+
+        goalPreviousLeft.setOnClickListener(v -> {
+            c.add(Calendar.DATE, -1);
+            String formattedDatee = df.format(c.getTime());
+            goalsTitleBar.setText(formattedDatee);
+        });
     }
 
     private void inflateToDoListDialog() {
@@ -122,6 +152,7 @@ public class DailyGoalsFragment extends Fragment {
             goalDateFrom = dialog.findViewById(R.id.from_date_goal);
             goalDateTo = dialog.findViewById(R.id.to_date_goal);
             goalAdd = dialog.findViewById(R.id.goal_add);
+            goalAmount = dialog.findViewById(R.id.goal_amount);
 
             goalDateFrom.setOnClickListener(v -> {
                 goalDateFrom.setText("");
@@ -172,9 +203,9 @@ public class DailyGoalsFragment extends Fragment {
                         logTypesSpinner2.add("Hours");
                         logTypesSpinner2.add("Minutes");
                         logTypesSpinner2.add("Seconds");
-
                         goalTypeSpinner2.setVisibility(View.VISIBLE);
                         goalTypeSpinner2.setAdapter(new Spinner2GoalAdapter(getContext(), R.layout.spinner2_row_goal_type, logTypesSpinner2));
+                        goalAmount.setVisibility(View.VISIBLE);
                     }else if(id == 3){
                         ArrayList<String> logTypesSpinner2 = new ArrayList<>();
                         logTypesSpinner2.add("Pcs");
@@ -188,10 +219,13 @@ public class DailyGoalsFragment extends Fragment {
                         goalTypeSpinner2 = dialog.findViewById(R.id.goal_item_log_type_spinner_2);
                         goalTypeSpinner2.setVisibility(View.VISIBLE);
                         goalTypeSpinner2.setAdapter(new Spinner2GoalAdapter(getContext(), R.layout.spinner2_row_goal_type, logTypesSpinner2));
+                        goalAmount.setVisibility(View.VISIBLE);
                     }else if(id == 1){
                         goalTypeSpinner2.setVisibility(View.INVISIBLE);
+                        goalAmount.setVisibility(View.GONE);
                     } else if(id == 0){
                         goalTypeSpinner2.setVisibility(View.INVISIBLE);
+                        goalAmount.setVisibility(View.GONE);
                     }
                 }
                 public void onNothingSelected(AdapterView<?> parent) {
@@ -199,7 +233,31 @@ public class DailyGoalsFragment extends Fragment {
             });
 
             goalAdd.setOnClickListener(v -> {
-                // add goal to the database
+                if(goalName.getText() != null  && !goalTypeSpinner1.getSelectedItem().toString().equals("Type")) {
+                    Goals goal = new Goals();
+                    goal.setGoalName(goalName.getText().toString());
+                    if(goalNotes.getText() != null){
+                        goal.setGoalNotes(goalNotes.getText().toString());
+                    }else{
+                        goal.setGoalNotes("");
+                    }
+                    goal.setGoalType1(goalTypeSpinner1.getSelectedItem().toString());
+                    if(goalTypeSpinner2.getSelectedItem() != null) {
+                        goal.setGoalType2(goalTypeSpinner2.getSelectedItem().toString());
+                    }else{
+                        goal.setGoalType2("");
+                    }
+                    goal.setGoalDateStart(goalDateFrom.getText().toString());
+                    goal.setGoalDateEnd(goalDateTo.getText().toString());
+                    if(goalAmount.getVisibility() == View.VISIBLE){
+                        goal.setGoalAmount(goalAmount.getText().toString());
+                    }else{
+                        goal.setGoalAmount("");
+                    }
+                    AppDatabase.getInstance(getContext()).getGoalsDao().insert(goal);
+                }else{
+                    Snackbar.make(requireView(), "Goal Name must not be empty and Goal type must be chosen", Snackbar.LENGTH_LONG);
+                }
             });
         }
     }

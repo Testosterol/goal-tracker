@@ -24,4 +24,5 @@
     <string name="goal_name">Goal name</string>
     <string name="log_type">Log Type</string>
     <string name="next_day">next_day</string>
+    <string name="goal_notes">Goal notes</string>
 </resources>

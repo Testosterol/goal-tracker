@@ -21,17 +21,21 @@
         app:layout_constraintBottom_toTopOf="@+id/goal_item_log_type_spinner_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.51" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/goal_item_log_type_spinner_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/from_date_goal"
-        app:layout_constraintEnd_toStartOf="@+id/goal_item_log_type_spinner_2"
+        app:layout_constraintBottom_toTopOf="@+id/goal_amount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goaL_item_name" />
 
@@ -39,11 +43,16 @@
         android:id="@+id/goal_item_log_type_spinner_2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="visible"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/to_date_goal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/goal_item_log_type_spinner_1"
-        app:layout_constraintTop_toBottomOf="@+id/goaL_item_name" />
+        app:layout_constraintStart_toEndOf="@+id/goal_amount"
+        app:layout_constraintTop_toBottomOf="@+id/goal_item_log_type_spinner_1"
+        tools:visibility="gone" />
 
     <com.example.goaltracker.Util.LinedEditText
         android:id="@+id/goals_notes"
@@ -51,7 +60,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="23dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
@@ -61,6 +70,7 @@
         android:imeOptions="actionNone"
         app:layout_constraintBottom_toTopOf="@+id/goal_add"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/from_date_goal" />
 
@@ -68,7 +78,11 @@
         android:id="@+id/goal_add"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="186dp"
+        android:layout_marginLeft="186dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="185dp"
+        android:layout_marginRight="185dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/ic_check_box_green_24dp"
         android:clickable="true"
@@ -85,16 +99,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
         android:hint="From"
         android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/goals_notes"
         app:layout_constraintEnd_toStartOf="@+id/to_date_goal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goal_item_log_type_spinner_1" />
+        app:layout_constraintTop_toBottomOf="@+id/goal_amount" />
 
     <EditText
         android:id="@+id/to_date_goal"
@@ -102,15 +115,37 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="To"
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/goals_notes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/from_date_goal" />
+        app:layout_constraintStart_toEndOf="@+id/from_date_goal"
+        app:layout_constraintTop_toBottomOf="@+id/goal_amount" />
+
+    <EditText
+        android:id="@+id/goal_amount"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Amount"
+        android:inputType="textPersonName"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/from_date_goal"
+        app:layout_constraintEnd_toStartOf="@+id/goal_item_log_type_spinner_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_item_log_type_spinner_1"
+        tools:visibility="gone" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

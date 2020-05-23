@@ -19,6 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 
      public abstract ToDoListDao getToDoListDao();
+        public abstract GoalsDao getGoalsDao();
 
     public synchronized static AppDatabase getInstance(Context context) {
         if (instance == null) {
