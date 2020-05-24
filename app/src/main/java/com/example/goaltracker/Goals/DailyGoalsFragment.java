@@ -2,21 +2,33 @@ package com.example.goaltracker.Goals;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -24,12 +36,15 @@ import android.widget.TextView;
 
 import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
+import com.example.goaltracker.ToDoList.ToDoListViewModel;
 import com.example.goaltracker.Util.LinedEditText;
 import com.example.goaltracker.Util.ListItemAddProg;
 import com.example.goaltracker.Util.Spinner2GoalAdapter;
 import com.example.goaltracker.Util.SpinnerGoalAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -57,6 +72,9 @@ public class DailyGoalsFragment extends Fragment {
     private TextView goalsTitleBar;
     private LinedEditText goalNotes;
     private ImageButton goalAdd, goalNextRight, goalPreviousLeft;
+    private DailyGoalsViewModel goalsViewModel;
+    private RecyclerView mRecyclerView;
+    private DailyGoalsAdapter mRecyclerViewAdapter;
 
     private int mYear, mMonth, mDay, mYear2, mMonth2, mDay2;
 
@@ -106,15 +124,13 @@ public class DailyGoalsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FloatingActionButton toDoListItemButton = view.findViewById(R.id.button_add_goal_item);
-        toDoListItemButton.setOnClickListener(v -> inflateToDoListDialog());
 
         goalNextRight = view.findViewById(R.id.image_button_toolbar_daily_goals_right);
         goalPreviousLeft = view.findViewById(R.id.image_button_toolbar_daily_goals_left);
         goalsTitleBar = view.findViewById(R.id.toolbar_daily_goals_title);
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("EEEE dd MMM, yyyy", Locale.ENGLISH);
+        SimpleDateFormat df = new SimpleDateFormat("EEEE dd-MM-yyyy", Locale.ENGLISH);
         String formattedDate = df.format(c.getTime());
 
         goalsTitleBar.setText(formattedDate);
@@ -123,13 +139,66 @@ public class DailyGoalsFragment extends Fragment {
             c.add(Calendar.DATE, +1);
             String formattedDatee = df.format(c.getTime());
             goalsTitleBar.setText(formattedDatee);
+            if (goalsViewModel != null) {
+                String[] cutTitleDate = goalsTitleBar.getText().toString().split(" ");
+                Log.d("kokot", "goalNextRight: " + cutTitleDate[1]);
+                goalsViewModel.filterTextAll.setValue(cutTitleDate[1]);
+            }
         });
 
         goalPreviousLeft.setOnClickListener(v -> {
             c.add(Calendar.DATE, -1);
             String formattedDatee = df.format(c.getTime());
             goalsTitleBar.setText(formattedDatee);
+            if (goalsViewModel != null) {
+                String[] cutTitleDate = goalsTitleBar.getText().toString().split(" ");
+                Log.d("kokot", "goalPreviousLeft: " + cutTitleDate[1]);
+                goalsViewModel.filterTextAll.setValue(cutTitleDate[1]);
+            }
         });
+
+        goalsViewModel = new ViewModelProvider(this).get(DailyGoalsViewModel.class);
+        mRecyclerView = view.findViewById(R.id.recycler_view_daily_goals_content);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        goalsViewModel.init(goalsViewModel.goalsDao);
+
+        mRecyclerViewAdapter = new DailyGoalsAdapter();
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        goalsViewModel.allGoalsItems.observe(getViewLifecycleOwner(), goalsList -> {
+            // update UI
+            try {
+                //to prevent animation recyclerView when change the list
+                mRecyclerView.setItemAnimator(null);
+                ((SimpleItemAnimator) Objects.requireNonNull(mRecyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.d("kokot", "goalsViewModel.allGoalsItems: " + goalsList);
+            for(Goals goals : goalsList){
+                Log.d("kokot", "goalsViewModel.getGoalDateStart: " + goals.getGoalDateStart());
+                Log.d("kokot", "goalsViewModel.getGoalDateEnd: " + goals.getGoalDateEnd());
+            }
+            mRecyclerViewAdapter.submitList(goalsList);
+        });
+
+        if (goalsViewModel != null) {
+            String[] cutTitleDate = goalsTitleBar.getText().toString().split(" ");
+            goalsViewModel.filterTextAll.setValue(cutTitleDate[1]);
+        }
+
+
+        FloatingActionButton toDoListItemButton = view.findViewById(R.id.button_add_goal_item);
+        toDoListItemButton.setOnClickListener(v -> inflateToDoListDialog());
+
+
+
     }
 
     private void inflateToDoListDialog() {
@@ -160,10 +229,12 @@ public class DailyGoalsFragment extends Fragment {
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
-                        (view, year, monthOfYear, dayOfMonth) -> {
-                            String formattedDate = String.format(Locale.ENGLISH, "%02d-%02d-%d", dayOfMonth, (monthOfYear + 1), year);
-                            goalDateFrom.setText(formattedDate);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String formattedDate = String.format(Locale.ENGLISH, "%02d-%02d-%d", dayOfMonth, (monthOfYear + 1), year);
+                                goalDateFrom.setText(formattedDate);
+                            }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             });
@@ -241,7 +312,8 @@ public class DailyGoalsFragment extends Fragment {
                     }else{
                         goal.setGoalNotes("");
                     }
-                    goal.setGoalType1(goalTypeSpinner1.getSelectedItem().toString());
+                    ListItemAddProg listItemAddProg1 = (ListItemAddProg) goalTypeSpinner1.getSelectedItem();
+                    goal.setGoalType1(listItemAddProg1.getName());
                     if(goalTypeSpinner2.getSelectedItem() != null) {
                         goal.setGoalType2(goalTypeSpinner2.getSelectedItem().toString());
                     }else{
@@ -249,6 +321,7 @@ public class DailyGoalsFragment extends Fragment {
                     }
                     goal.setGoalDateStart(goalDateFrom.getText().toString());
                     goal.setGoalDateEnd(goalDateTo.getText().toString());
+                    Log.d("kokot", "setGoalDateEnd(goalDateTo.getText().toString()): " + goalDateTo.getText().toString());
                     if(goalAmount.getVisibility() == View.VISIBLE){
                         goal.setGoalAmount(goalAmount.getText().toString());
                     }else{
