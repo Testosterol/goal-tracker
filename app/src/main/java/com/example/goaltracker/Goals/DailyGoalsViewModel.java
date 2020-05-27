@@ -19,7 +19,7 @@ public class DailyGoalsViewModel extends AndroidViewModel {
 
     public GoalsDao goalsDao;
     public LiveData<List<Goals>> allGoalsItems;
-    public MutableLiveData<String> filterTextAll = new MutableLiveData<>();
+    public MutableLiveData<Long> filterTextAll = new MutableLiveData<Long>();
 
     public DailyGoalsViewModel(@NonNull Application application) {
         super(application);

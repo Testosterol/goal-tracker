@@ -17,6 +17,6 @@ public interface GoalsDao {
 
 
     // TODO: FIX DATE AND SHIT
-    @Query("SELECT * FROM goals where goal_date_start like :input or goal_date_end like :input ORDER BY goal_name ASC" )
-    LiveData<List<Goals>> getInitialGoalsItemsByDate(String input);
+    @Query("SELECT * FROM goals where goal_date_start == :input ORDER BY goal_name ASC" )
+    LiveData<List<Goals>> getInitialGoalsItemsByDate(Long input);
 }

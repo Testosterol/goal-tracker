@@ -18,10 +18,10 @@ public class Goals {
     private String goalName;
 
     @ColumnInfo(name = "goal_date_start")
-    private String goalDateStart;
+    private long goalDateStart;
 
     @ColumnInfo(name = "goal_date_end")
-    private String goalDateEnd;
+    private long goalDateEnd;
 
     @ColumnInfo(name = "goal_type_1")
     private String goalType1;
@@ -81,19 +81,19 @@ public class Goals {
         this.goalName = goalName;
     }
 
-    public String getGoalDateStart() {
+    public long getGoalDateStart() {
         return goalDateStart;
     }
 
-    public void setGoalDateStart(String goalDateStart) {
+    public void setGoalDateStart(long goalDateStart) {
         this.goalDateStart = goalDateStart;
     }
 
-    public String getGoalDateEnd() {
+    public long getGoalDateEnd() {
         return goalDateEnd;
     }
 
-    public void setGoalDateEnd(String goalDateEnd) {
+    public void setGoalDateEnd(long goalDateEnd) {
         this.goalDateEnd = goalDateEnd;
     }
 

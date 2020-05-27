@@ -47,6 +47,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -137,14 +138,26 @@ public class DailyGoalsFragment extends Fragment {
 
         goalNextRight.setOnClickListener(v -> {
             c.add(Calendar.DATE, +1);
-            String formattedDatee = df.format(c.getTime());
-            goalsTitleBar.setText(formattedDatee);
+            String formattedDattee = df.format(c.getTime());
+            goalsTitleBar.setText(formattedDattee);
             if (goalsViewModel != null) {
                 String[] cutTitleDate = goalsTitleBar.getText().toString().split(" ");
                 Log.d("kokot", "goalNextRight: " + cutTitleDate[1]);
-                goalsViewModel.filterTextAll.setValue(cutTitleDate[1]);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+                Date date = null;
+                try {
+                    date = dateFormat.parse(cutTitleDate[1]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (date != null) {
+                    long millis = date.getTime();
+                    goalsViewModel.filterTextAll.setValue(millis);
+                }
             }
         });
+
 
         goalPreviousLeft.setOnClickListener(v -> {
             c.add(Calendar.DATE, -1);
@@ -153,7 +166,18 @@ public class DailyGoalsFragment extends Fragment {
             if (goalsViewModel != null) {
                 String[] cutTitleDate = goalsTitleBar.getText().toString().split(" ");
                 Log.d("kokot", "goalPreviousLeft: " + cutTitleDate[1]);
-                goalsViewModel.filterTextAll.setValue(cutTitleDate[1]);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+                Date date = null;
+                try {
+                    date = dateFormat.parse(cutTitleDate[1]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (date != null) {
+                    long millis = date.getTime();
+                    goalsViewModel.filterTextAll.setValue(millis);
+                }
             }
         });
 
@@ -180,17 +204,22 @@ public class DailyGoalsFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.d("kokot", "goalsViewModel.allGoalsItems: " + goalsList);
-            for(Goals goals : goalsList){
-                Log.d("kokot", "goalsViewModel.getGoalDateStart: " + goals.getGoalDateStart());
-                Log.d("kokot", "goalsViewModel.getGoalDateEnd: " + goals.getGoalDateEnd());
-            }
             mRecyclerViewAdapter.submitList(goalsList);
         });
 
         if (goalsViewModel != null) {
             String[] cutTitleDate = goalsTitleBar.getText().toString().split(" ");
-            goalsViewModel.filterTextAll.setValue(cutTitleDate[1]);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+            Date date = null;
+            try {
+                date = dateFormat.parse(cutTitleDate[1]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (date != null) {
+                long millis = date.getTime();
+                goalsViewModel.filterTextAll.setValue(millis);
+            }
         }
 
 
@@ -200,6 +229,7 @@ public class DailyGoalsFragment extends Fragment {
 
 
     }
+
 
     private void inflateToDoListDialog() {
         Context mContext = getContext();
@@ -304,7 +334,7 @@ public class DailyGoalsFragment extends Fragment {
             });
 
             goalAdd.setOnClickListener(v -> {
-                if(goalName.getText() != null  && !goalTypeSpinner1.getSelectedItem().toString().equals("Type")) {
+                if(goalName.getText() != null  && !goalTypeSpinner1.getSelectedItem().toString().equals("Type") && goalDateFrom.getText() != null) {
                     Goals goal = new Goals();
                     goal.setGoalName(goalName.getText().toString());
                     if(goalNotes.getText() != null){
@@ -319,19 +349,55 @@ public class DailyGoalsFragment extends Fragment {
                     }else{
                         goal.setGoalType2("");
                     }
-                    goal.setGoalDateStart(goalDateFrom.getText().toString());
-                    goal.setGoalDateEnd(goalDateTo.getText().toString());
-                    Log.d("kokot", "setGoalDateEnd(goalDateTo.getText().toString()): " + goalDateTo.getText().toString());
                     if(goalAmount.getVisibility() == View.VISIBLE){
                         goal.setGoalAmount(goalAmount.getText().toString());
                     }else{
                         goal.setGoalAmount("");
                     }
-                    AppDatabase.getInstance(getContext()).getGoalsDao().insert(goal);
+
+
+                    // TODO FIXX DATE NULL FOR SOME REASON
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+                    Date date = null;
+                    Date date1 = null;
+                    try {
+                        if(goalDateTo.getText() == null){
+                            Calendar startCalender = Calendar.getInstance();
+                            startCalender.setTime(df.parse(goalDateTo.getText().toString()));
+                            startCalender.add((Calendar.MONTH), 1);
+                            date1 = startCalender.getTime();
+                        }else{
+                            date1 = df.parse(goalDateTo.getText().toString());
+                        }
+                        date = df.parse(goalDateFrom.getText().toString());
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
                 }else{
                     Snackbar.make(requireView(), "Goal Name must not be empty and Goal type must be chosen", Snackbar.LENGTH_LONG);
                 }
             });
         }
+    }
+
+    private static void calculateDaysBetweenEventsAndCreateThem(Context context, Date startDate, Date endDate, Goals goals) {
+        Calendar startCalender = Calendar.getInstance();
+        startCalender.setTime(startDate);
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTime(endDate);
+
+        // 1.st
+        goals.setGoalDateStart(startDate.getTime());
+        goals.setGoalDateEnd(endDate.getTime());
+
+        // loop
+        for(; startCalender.compareTo(endCalendar)<=0; startCalender.add(Calendar.DATE, 1)) {
+            goals.setGoalDateStart(startCalender.getTime().getTime());
+            AppDatabase.getInstance(context).getGoalsDao().insert(goals);
+        }
+
     }
 }
