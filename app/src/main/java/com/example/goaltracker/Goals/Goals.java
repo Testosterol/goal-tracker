@@ -29,17 +29,14 @@ public class Goals {
     @ColumnInfo(name = "goal_type_2")
     private String goalType2;
 
-    @ColumnInfo(name = "goal_notes")
-    private String goalNotes;
-
     @ColumnInfo(name = "goal_value_finished")
     private String goalValueFinished;
 
     @ColumnInfo(name = "goal_amount")
     private String goalAmount;
 
-    //state of the item
-    private boolean expanded;
+    @ColumnInfo(name = "goal_category")
+    private String goalCategory;
 
     public static DiffUtil.ItemCallback<Goals> DIFF_CALLBACK = new DiffUtil.ItemCallback<Goals>() {
         @Override
@@ -113,14 +110,6 @@ public class Goals {
         this.goalType2 = goalType2;
     }
 
-    public String getGoalNotes() {
-        return goalNotes;
-    }
-
-    public void setGoalNotes(String goalNotes) {
-        this.goalNotes = goalNotes;
-    }
-
     public String getGoalValueFinished() {
         return goalValueFinished;
     }
@@ -137,11 +126,11 @@ public class Goals {
         this.goalAmount = goalAmount;
     }
 
-    public boolean isExpanded() {
-        return expanded;
+    public String getGoalCategory() {
+        return goalCategory;
     }
 
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
+    public void setGoalCategory(String goalCategory) {
+        this.goalCategory = goalCategory;
     }
 }

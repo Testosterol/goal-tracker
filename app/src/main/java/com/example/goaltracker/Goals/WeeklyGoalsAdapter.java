@@ -1,13 +1,10 @@
 package com.example.goaltracker.Goals;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,36 +15,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
-import com.example.goaltracker.ToDoList.ToDoList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.RecyclerItemViewHolder> {
+public class WeeklyGoalsAdapter extends ListAdapter<Goals, WeeklyGoalsAdapter.RecyclerItemViewHolder> {
 
     private List<Goals> filterGoalsList = new ArrayList<>();
     private List<Goals> goalList = new ArrayList<>();
     private Goals goals;
     private Context mContext;
 
-    protected DailyGoalsAdapter(Context context) {
+    protected WeeklyGoalsAdapter(Context context) {
         super(Goals.DIFF_CALLBACK);
         this.mContext = context;
     }
 
     @NonNull
     @Override
-    public RecyclerItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WeeklyGoalsAdapter.RecyclerItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
 
-        View contactView = inflater.inflate(R.layout.weekly_goal_recycler_view, parent, false);
-        return new DailyGoalsAdapter.RecyclerItemViewHolder(contactView);
+        View contactView = inflater.inflate(R.layout.daily_goal_recycler_view, parent, false);
+        return new WeeklyGoalsAdapter.RecyclerItemViewHolder(contactView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WeeklyGoalsAdapter.RecyclerItemViewHolder holder, int position) {
         if (position <= -1) {
             return;
         }

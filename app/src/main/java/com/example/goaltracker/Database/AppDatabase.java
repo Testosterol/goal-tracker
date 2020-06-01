@@ -6,12 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.goaltracker.Goals.Goals;
 import com.example.goaltracker.ToDoList.ToDoList;
 
-@Database(entities = {ToDoList.class, Goals.class}, version = 3, exportSchema = false)
+@Database(entities = {ToDoList.class, Goals.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "to_do_list_db";
@@ -28,6 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return instance;
     }
+
 
     private static AppDatabase createToDoListDatabaseInstance(Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)

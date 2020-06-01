@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.goaltracker.Goals.Goals;
 
@@ -15,8 +16,14 @@ public interface GoalsDao {
     @Insert
     void insert(Goals... goals);
 
+    @Update
+    void update(Goals... goals);
 
-    // TODO: FIX DATE AND SHIT
-    @Query("SELECT * FROM goals where goal_date_start == :input ORDER BY goal_name ASC" )
+
+    @Query("SELECT * FROM goals where goal_date_start == :input AND goal_value_finished == '' AND goal_category LIKE 'daily' ORDER BY goal_name ASC" )
     LiveData<List<Goals>> getInitialGoalsItemsByDate(Long input);
+
+
+    @Query("SELECT * FROM goals where goal_date_start == :input AND goal_value_finished == '' AND goal_category LIKE 'weekly' ORDER BY goal_name ASC" )
+    LiveData<List<Goals>> getInitialWeeklyGoalsItemsByDate(Long input);
 }
