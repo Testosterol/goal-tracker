@@ -1,14 +1,23 @@
 package com.example.goaltracker.Goals;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.goaltracker.R;
+import com.example.goaltracker.Util.LinedEditText;
 
 
 /**
@@ -21,6 +30,18 @@ public class MonthlyGoalsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private Dialog dialog;
+    private Spinner goalTypeSpinner1, goalTypeSpinner2;
+    private EditText goalName, goalDateFrom, goalDateTo, goalAmount;
+    private TextView goalsTitleBar;
+    private LinedEditText goalNotes;
+    private ImageButton goalAdd, goalNextRight, goalPreviousLeft, goalDelete;
+    private WeeklyGoalsViewModel goalsViewModel;
+    private RecyclerView mRecyclerView;
+    private WeeklyGoalsAdapter mRecyclerViewAdapter;
+
+    private int mYear, mMonth, mDay, mYear2, mMonth2, mDay2;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -62,5 +83,14 @@ public class MonthlyGoalsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_monthly_goals, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        goalNextRight = view.findViewById(R.id.image_button_toolbar_monthly_goals_right);
+        goalPreviousLeft = view.findViewById(R.id.image_button_toolbar_monthly_goals_left);
+        goalsTitleBar = view.findViewById(R.id.toolbar_monthly_goals_title);
     }
 }

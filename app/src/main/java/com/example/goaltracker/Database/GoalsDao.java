@@ -26,4 +26,7 @@ public interface GoalsDao {
 
     @Query("SELECT * FROM goals where goal_date_start == :input AND goal_value_finished == '' AND goal_category LIKE 'weekly' ORDER BY goal_name ASC" )
     LiveData<List<Goals>> getInitialWeeklyGoalsItemsByDate(Long input);
+
+    @Query("SELECT * FROM goals where goal_date_start == :input AND goal_value_finished == '' AND goal_category LIKE 'monthly' ORDER BY goal_name ASC" )
+    LiveData<List<Goals>> getInitialMonthlyGoalsItemsByDate(Long input);
 }

@@ -13,19 +13,18 @@ import com.example.goaltracker.Database.GoalsDao;
 
 import java.util.List;
 
-public class WeeklyGoalsViewModel extends AndroidViewModel {
+public class MonthlyGoalsViewModel  extends AndroidViewModel {
 
     public GoalsDao goalsDao;
     public LiveData<List<Goals>> allGoalsItems;
     public MutableLiveData<Long> filterTextAll = new MutableLiveData<>();
 
-    public WeeklyGoalsViewModel(@NonNull Application application) {
+    public MonthlyGoalsViewModel(@NonNull Application application) {
         super(application);
         goalsDao = AppDatabase.getInstance(this.getApplication()).getGoalsDao();
     }
 
     public void init(GoalsDao goalsDao) {
-        allGoalsItems = Transformations.switchMap(filterTextAll, input -> goalsDao.getInitialWeeklyGoalsItemsByDate(input));
+        allGoalsItems = Transformations.switchMap(filterTextAll, input -> goalsDao.getInitialMonthlyGoalsItemsByDate(input));
     }
 }
-
