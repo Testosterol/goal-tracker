@@ -34,9 +34,11 @@ import com.example.goaltracker.Util.Spinner2GoalAdapter;
 import com.example.goaltracker.Util.SpinnerGoalAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -128,12 +130,12 @@ public class WeeklyGoalsFragment extends Fragment {
             String formattedDattee = df.format(c.getTime());
             goalsTitleBar.setText(formattedDattee);
             if (goalsViewModel != null) {
-                Pattern p = Pattern.compile("-([^-]*)-");
-                Matcher m = p.matcher(formattedDattee);
-                while (m.find()) {
-                    goalsViewModel.filterTextAll.setValue(Long.valueOf(Objects.requireNonNull(m.group(1))));
+                try {
+                    Date parsedDate = df.parse(goalsTitleBar.getText().toString());
+                    goalsViewModel.filterTextAll.setValue(parsedDate.getTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-
             }
         });
 
@@ -142,11 +144,13 @@ public class WeeklyGoalsFragment extends Fragment {
             c.add(Calendar.WEEK_OF_YEAR, -1);
             String formattedDattee = df.format(c.getTime());
             goalsTitleBar.setText(formattedDattee);
+            c.get(Calendar.DATE);
             if (goalsViewModel != null) {
-                Pattern p = Pattern.compile("-([^-]*)-");
-                Matcher m = p.matcher(formattedDattee);
-                while (m.find()) {
-                    goalsViewModel.filterTextAll.setValue(Long.valueOf(Objects.requireNonNull(m.group(1))));
+                try {
+                    Date parsedDate = df.parse(goalsTitleBar.getText().toString());
+                    goalsViewModel.filterTextAll.setValue(parsedDate.getTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -178,11 +182,14 @@ public class WeeklyGoalsFragment extends Fragment {
         });
 
         if (goalsViewModel != null) {
-            Pattern p = Pattern.compile("-([^-]*)-");
-            Matcher m = p.matcher(formattedDate);
-            while (m.find()) {
-                goalsViewModel.filterTextAll.setValue(Long.valueOf(Objects.requireNonNull(m.group(1))));
+            try {
+                Date dateParsed = df.parse(goalsTitleBar.getText().toString());
+                goalsViewModel.filterTextAll.setValue(dateParsed.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+
+
         }
 
         FloatingActionButton addGoalButton = view.findViewById(R.id.button_add_goal_item_weekly);
@@ -212,7 +219,6 @@ public class WeeklyGoalsFragment extends Fragment {
             goalDelete = dialog.findViewById(R.id.goal_delete);
 
 
-            // TODO DATE FORMAT SHJIOT
             goalDateFrom.setOnClickListener(v -> {
                 goalDateFrom.setText("");
                 final Calendar c = Calendar.getInstance();
@@ -220,7 +226,6 @@ public class WeeklyGoalsFragment extends Fragment {
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year, monthOfYear, dayOfMonth) -> {
-
                     SimpleDateFormat df = new SimpleDateFormat("'Week'-ww-YYYY", Locale.ENGLISH);
                     c.set(year, monthOfYear, dayOfMonth, 0, 0);
                     String formattedDate = df.format(c.getTime());
@@ -317,45 +322,47 @@ public class WeeklyGoalsFragment extends Fragment {
                     }
                     goal.setGoalCategory("weekly");
 
-
-                    Long startWeek = null;
-                    Long endWeek = null;
-                    if ("".contentEquals(goalDateTo.getText())) {
-                        Pattern p = Pattern.compile("-([^-]*)-");
-                        Matcher m = p.matcher(goalDateFrom.getText().toString());
-                        while (m.find()) {
-                            startWeek = Long.parseLong(Objects.requireNonNull(m.group(1)));
-                            goal.setGoalDateStart(startWeek);
-                        }
-                    } else {
-                        if ((!goalDateTo.getText().toString().matches("[A-Za-z]{4}-\\d{2}-\\d{4}"))) {
-                            Toast.makeText(getContext(), "Date must be in WEEK - NUMBER - YYYY format", Toast.LENGTH_LONG).show();
+                    SimpleDateFormat df = new SimpleDateFormat("'Week'-ww-YYYY", Locale.ENGLISH);
+                    Date date = null;
+                    Date date1 = null;
+                    try {
+                        if ("".contentEquals(goalDateTo.getText())) {
+                            Calendar startCalender = Calendar.getInstance();
+                            startCalender.setTime(Objects.requireNonNull(df.parse(goalDateFrom.getText().toString())));
+                            startCalender.add((Calendar.MONTH), 1);
+                            date1 = startCalender.getTime();
+                            date = df.parse(goalDateFrom.getText().toString());
                         } else {
-                            Pattern p = Pattern.compile("-([^-]*)-");
-                            Matcher m = p.matcher(goalDateFrom.getText().toString());
-                            while (m.find()) {
-                                startWeek = Long.valueOf(Objects.requireNonNull(m.group(1)));
-                                goal.setGoalDateStart(startWeek);
-                            }
-                            Matcher matcher = p.matcher(goalDateTo.getText().toString());
-                            while (matcher.find()) {
-                                endWeek = Long.parseLong(Objects.requireNonNull(matcher.group(1)));
-                                goal.setGoalDateEnd(endWeek);
+                            if ((!goalDateTo.getText().toString().matches("[A-Za-z]{4}-\\d{2}-\\d{4}"))) {
+                                Toast.makeText(getContext(), "Date must be in WEEK - NUMBER - YYYY format", Toast.LENGTH_LONG).show();
+                            } else {
+                                date1 = df.parse(goalDateTo.getText().toString());
+                                date = df.parse(goalDateFrom.getText().toString());
                             }
                         }
-                    }
-                    if (goalAmount.getVisibility() == View.VISIBLE) {
-                        if (goalAmount.getText().toString().matches("-?(0|[1-9]\\d*)")) {
-                            goal.setGoalAmount(goalAmount.getText().toString());
-                            calculateWeeksBetweenEventsAndCreateThem(getContext(), startWeek, endWeek, goal);
-                            dialog.dismiss();
+                        if (goalAmount.getVisibility() == View.VISIBLE) {
+                            if (goalAmount.getText().toString().matches("-?(0|[1-9]\\d*)")) {
+                                goal.setGoalAmount(goalAmount.getText().toString());
+                                if(date1.getTime() >= date.getTime()) {
+                                    calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
+                                    dialog.dismiss();
+                                }else{
+                                    Toast.makeText(getContext(), "end date must be in the future, not in the past", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "Amount must be a numeric number", Toast.LENGTH_LONG).show();
+                            }
                         } else {
-                            Toast.makeText(getContext(), "Amount must be a numeric number", Toast.LENGTH_LONG).show();
+                            goal.setGoalAmount("");
+                            if(date1.getTime() >= date.getTime()) {
+                                calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
+                                dialog.dismiss();
+                            }else{
+                                Toast.makeText(getContext(), "end date must be in the future, not in the past", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    } else {
-                        goal.setGoalAmount("");
-                        calculateWeeksBetweenEventsAndCreateThem(getContext(), startWeek, endWeek, goal);
-                        dialog.dismiss();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                 }
             } else {
@@ -365,22 +372,21 @@ public class WeeklyGoalsFragment extends Fragment {
         });
     }
 
-    private static void calculateWeeksBetweenEventsAndCreateThem(Context context, Long startDate, Long endDate, Goals goals){
-        goals.setGoalDateStart(startDate);
-        if(endDate == null){
-            goals.setGoalDateEnd(startDate + 5);
-            for(int i = 0; i< 5; i++){
-                goals.setGoalDateStart(startDate + i);
-                AppDatabase.getInstance(context).getGoalsDao().insert(goals);
-            }
-        }else{
-            goals.setGoalDateEnd(endDate);
-            for(Long i = startDate; i<= endDate; i++){
-                goals.setGoalDateStart(i);
-                AppDatabase.getInstance(context).getGoalsDao().insert(goals);
-            }
+    private void calculateDaysBetweenEventsAndCreateThem(Context context, Date startDate, Date endDate, Goals goals) {
+        Calendar startCalender = Calendar.getInstance();
+        startCalender.setTime(startDate);
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTime(endDate);
+
+        // 1.st
+        goals.setGoalDateStart(startDate.getTime());
+        goals.setGoalDateEnd(endDate.getTime());
+
+        // loop
+        for (; startCalender.compareTo(endCalendar) <= 0; startCalender.add(Calendar.WEEK_OF_YEAR, 1)) {
+            goals.setGoalDateStart(startCalender.getTime().getTime());
+            AppDatabase.getInstance(context).getGoalsDao().insert(goals);
         }
     }
-
 }
 

@@ -353,15 +353,24 @@ public class DailyGoalsFragment extends Fragment {
                     if (goalAmount.getVisibility() == View.VISIBLE) {
                         if (goalAmount.getText().toString().matches("-?(0|[1-9]\\d*)")) {
                             goal.setGoalAmount(goalAmount.getText().toString());
-                            calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
-                            dialog.dismiss();
+                            if(date1.getTime() >= date.getTime()) {
+                                calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
+                                dialog.dismiss();
+                            }else{
+                                Toast.makeText(getContext(), "end date must be in the future, not in the past", Toast.LENGTH_LONG).show();
+                            }
                         } else {
                             Toast.makeText(getContext(), "Amount must be a numeric number", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         goal.setGoalAmount("");
-                        calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
-                        dialog.dismiss();
+                        if(date1.getTime() >= date.getTime()) {
+                            calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
+                            dialog.dismiss();
+                        }else{
+                            Toast.makeText(getContext(), "end date must be in the future, not in the past", Toast.LENGTH_LONG).show();
+                        }
+
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
