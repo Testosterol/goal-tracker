@@ -29,4 +29,18 @@ public interface GoalsDao {
 
     @Query("SELECT * FROM goals where goal_date_start == :input AND goal_value_finished == '' AND goal_category LIKE 'monthly' ORDER BY goal_name ASC" )
     LiveData<List<Goals>> getInitialMonthlyGoalsItemsByDate(Long input);
+
+    @Query("SELECT goal_name FROM goals where goal_category LIKE 'daily' GROUP BY goal_name")
+    List<String> getDailyGoalsNames();
+
+    @Query("SELECT goal_name FROM goals where goal_category LIKE 'weekly' GROUP BY goal_name")
+    List<String> getWeeklyGoalsNames();
+
+    @Query("SELECT goal_name FROM goals where goal_category LIKE 'monthly' GROUP BY goal_name")
+    List<String> getMonthlyGoalsNames();
+
+    @Query("SELECT goal_name FROM goals GROUP BY goal_name")
+    List<String> getAllGoalsNames();
+
+
 }

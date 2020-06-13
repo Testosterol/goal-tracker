@@ -45,12 +45,21 @@
             android:id="@+id/action_goalsFragment_to_monthlyGoalsFragment"
             app:destination="@id/monthlyGoalsFragment"
             app:popUpTo="@id/goalsFragment" />
+        <action
+            android:id="@+id/action_goalsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/goalsFragment" />
     </fragment>
     <fragment
         android:id="@+id/toDoListFragment"
         android:name="com.example.goaltracker.ToDoList.ToDoListFragment"
         android:label="fragment_to_do_list"
-        tools:layout="@layout/fragment_to_do_list" />
+        tools:layout="@layout/fragment_to_do_list" >
+        <action
+            android:id="@+id/action_toDoListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/toDoListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.goaltracker.Settings.SettingsFragment"
@@ -60,7 +69,12 @@
         android:id="@+id/statisticsFragment"
         android:name="com.example.goaltracker.Statistics.StatisticsFragment"
         android:label="fragment_statistics"
-        tools:layout="@layout/fragment_statistics" />
+        tools:layout="@layout/fragment_statistics" >
+        <action
+            android:id="@+id/action_statisticsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/statisticsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/dailyGoals"
         android:name="com.example.goaltracker.Goals.DailyGoalsFragment"

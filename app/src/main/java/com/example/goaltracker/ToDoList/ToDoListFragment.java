@@ -26,6 +26,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -201,6 +202,14 @@ public class ToDoListFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {// Not implemented here
+            Navigation.findNavController(requireView()).navigate(R.id.action_toDoListFragment_to_settingsFragment);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void inflateToDoListDialog() {
