@@ -47,7 +47,8 @@ public class StatisticsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Spinner goalsType, goalsSpecif;
+    Spinner goalsType;
+    MultiSpinner goalsSpecific;
 
     public StatisticsFragment() {
         // Required empty public constructor
@@ -91,6 +92,8 @@ public class StatisticsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        goalsSpecific = view.findViewById(R.id.multispinner);
+
 
         Toolbar myToolbar = view.findViewById(R.id.toolbar_statistics_fragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(myToolbar);
@@ -102,7 +105,6 @@ public class StatisticsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         goalsType = view.findViewById(R.id.spinner_statistics_type);
-        goalsSpecif = view.findViewById(R.id.spinner_statistics_goals);
 
         String[] itemsGoalsType = new String[]{"Daily goals", "Weekly goals", "Monthly goals", "Overall"};
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
@@ -111,68 +113,59 @@ public class StatisticsFragment extends Fragment {
         //set the spinners adapter to the previously created one.
         goalsType.setAdapter(adapter);
 
+
+        // TODO: figure out why we are getting selected numebr of all items even if they are not selected
         goalsType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Daily goals
                 if(position == 0){
-                    List<String> select_qualification = new ArrayList<>();
-                    select_qualification.add("Select goals");
-                    select_qualification.addAll(AppDatabase.getInstance(getContext()).getGoalsDao().getDailyGoalsNames());
-                    ArrayList<GoalsItem> listVOs = new ArrayList<>();
-                    for (int i = 0; i < select_qualification.size(); i++) {
-                        GoalsItem stateVO = new GoalsItem();
-                        stateVO.setTitle(select_qualification.get(i));
-                        stateVO.setSelected(false);
-                        listVOs.add(stateVO);
-                    }
-                    StatisticsAdapter myAdapter = new StatisticsAdapter(getContext(), 0, listVOs);
-                    goalsSpecif.setAdapter(myAdapter);
+                    List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getDailyGoalsNames();
+                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                        @Override
+                        public void onItemsSelected(boolean[] selected) {
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        }
+                    });
+
                 }
                 // Weekly goals
                 if(position == 1){
-                    List<String> select_qualification = new ArrayList<>();
-                    select_qualification.add("Select goals");
-                    select_qualification.addAll(AppDatabase.getInstance(getContext()).getGoalsDao().getWeeklyGoalsNames());
-                    ArrayList<GoalsItem> listVOs = new ArrayList<>();
-                    for (int i = 0; i < select_qualification.size(); i++) {
-                        GoalsItem stateVO = new GoalsItem();
-                        stateVO.setTitle(select_qualification.get(i));
-                        stateVO.setSelected(false);
-                        listVOs.add(stateVO);
-                    }
-                    StatisticsAdapter myAdapter = new StatisticsAdapter(getContext(), 0, listVOs);
-                    goalsSpecif.setAdapter(myAdapter);
+                    List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getWeeklyGoalsNames();
+                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                        @Override
+                        public void onItemsSelected(boolean[] selected) {
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        }
+                    });
+
                 }
                 // Monthly goals
                 if(position == 2){
-                    List<String> select_qualification = new ArrayList<>();
-                    select_qualification.add("Select goals");
-                    select_qualification.addAll(AppDatabase.getInstance(getContext()).getGoalsDao().getMonthlyGoalsNames());
-                    ArrayList<GoalsItem> listVOs = new ArrayList<>();
-                    for (int i = 0; i < select_qualification.size(); i++) {
-                        GoalsItem stateVO = new GoalsItem();
-                        stateVO.setTitle(select_qualification.get(i));
-                        stateVO.setSelected(false);
-                        listVOs.add(stateVO);
-                    }
-                    StatisticsAdapter myAdapter = new StatisticsAdapter(getContext(), 0, listVOs);
-                    goalsSpecif.setAdapter(myAdapter);
+                    List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getMonthlyGoalsNames();
+                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                        @Override
+                        public void onItemsSelected(boolean[] selected) {
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        }
+                    });
+
                 }
                 // Overall
                 if(position == 3){
-                    List<String> select_qualification = new ArrayList<>();
-                    select_qualification.add("Select goals");
-                    select_qualification.addAll(AppDatabase.getInstance(getContext()).getGoalsDao().getAllGoalsNames());
-                    ArrayList<GoalsItem> listVOs = new ArrayList<>();
-                    for (int i = 0; i < select_qualification.size(); i++) {
-                        GoalsItem stateVO = new GoalsItem();
-                        stateVO.setTitle(select_qualification.get(i));
-                        stateVO.setSelected(false);
-                        listVOs.add(stateVO);
-                    }
-                    StatisticsAdapter myAdapter = new StatisticsAdapter(getContext(), 0, listVOs);
-                    goalsSpecif.setAdapter(myAdapter);
+                    List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getAllGoalsNames();
+
+                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                        @Override
+                        public void onItemsSelected(boolean[] selected) {
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        }
+                    });
+
                 }
             }
 

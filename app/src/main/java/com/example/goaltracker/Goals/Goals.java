@@ -23,20 +23,17 @@ public class Goals {
     @ColumnInfo(name = "goal_date_end")
     private long goalDateEnd;
 
-    @ColumnInfo(name = "goal_type_1")
-    private String goalType1;
-
-    @ColumnInfo(name = "goal_type_2")
-    private String goalType2;
-
     @ColumnInfo(name = "goal_value_finished")
     private String goalValueFinished;
 
-    @ColumnInfo(name = "goal_amount")
-    private String goalAmount;
-
     @ColumnInfo(name = "goal_category")
     private String goalCategory;
+
+    @ColumnInfo(name = "goal_notes")
+    private String goalNotes;
+
+    //state of the item
+    private boolean expanded;
 
     public static DiffUtil.ItemCallback<Goals> DIFF_CALLBACK = new DiffUtil.ItemCallback<Goals>() {
         @Override
@@ -94,22 +91,6 @@ public class Goals {
         this.goalDateEnd = goalDateEnd;
     }
 
-    public String getGoalType1() {
-        return goalType1;
-    }
-
-    public void setGoalType1(String goalType1) {
-        this.goalType1 = goalType1;
-    }
-
-    public String getGoalType2() {
-        return goalType2;
-    }
-
-    public void setGoalType2(String goalType2) {
-        this.goalType2 = goalType2;
-    }
-
     public String getGoalValueFinished() {
         return goalValueFinished;
     }
@@ -118,19 +99,27 @@ public class Goals {
         this.goalValueFinished = goalValueFinished;
     }
 
-    public String getGoalAmount() {
-        return goalAmount;
-    }
-
-    public void setGoalAmount(String goalAmount) {
-        this.goalAmount = goalAmount;
-    }
-
     public String getGoalCategory() {
         return goalCategory;
     }
 
     public void setGoalCategory(String goalCategory) {
         this.goalCategory = goalCategory;
+    }
+
+    public String getGoalNotes() {
+        return goalNotes;
+    }
+
+    public void setGoalNotes(String goalNotes) {
+        this.goalNotes = goalNotes;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 }

@@ -2,30 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/goaL_item_name"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="@string/goal_name"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/goal_item_log_type_spinner_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/goal_item_log_type_spinner_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,24 +15,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/goal_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goaL_item_name" />
-
-    <Spinner
-        android:id="@+id/goal_item_log_type_spinner_2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:visibility="gone"
+        android:ems="10"
+        android:hint="@string/goal_name"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/from_date_goal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/goal_amount"
-        app:layout_constraintTop_toBottomOf="@+id/goal_item_log_type_spinner_1"
-        app:layout_constraintVertical_bias="0.521"
-        tools:visibility="gone" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <EditText
@@ -69,9 +39,8 @@
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/to_date_goal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goal_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/goaL_item_name" />
 
     <EditText
         android:id="@+id/to_date_goal"
@@ -86,34 +55,20 @@
         android:ems="10"
         android:hint="To"
         android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/goal_add"
+        app:layout_constraintBottom_toTopOf="@+id/linedEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/from_date_goal"
-        app:layout_constraintVertical_bias="0.016" />
-
-    <EditText
-        android:id="@+id/goal_amount"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:ems="10"
-        android:hint="Amount"
-        android:inputType="textPersonName"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/from_date_goal"
-        app:layout_constraintEnd_toStartOf="@+id/goal_item_log_type_spinner_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goal_item_log_type_spinner_1"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/from_date_goal" />
 
     <ImageButton
         android:id="@+id/goal_add"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/ic_baseline_check_circle_24"
         android:clickable="true"
@@ -122,17 +77,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/goal_delete"
-        app:layout_constraintTop_toBottomOf="@+id/to_date_goal" />
+        app:layout_constraintTop_toBottomOf="@+id/linedEditText" />
 
     <ImageButton
         android:id="@+id/goal_delete"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/ic_cancel_red_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/goal_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linedEditText" />
+
+    <com.example.goaltracker.Util.LinedEditText
+        android:id="@+id/linedEditText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="@string/notes"
+        android:imeOptions="actionNone"
+        app:layout_constraintBottom_toTopOf="@+id/goal_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/to_date_goal" />
 

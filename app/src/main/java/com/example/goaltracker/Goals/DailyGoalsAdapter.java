@@ -23,7 +23,7 @@ import com.example.goaltracker.ToDoList.ToDoList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.RecyclerItemViewHolder> {
+public class DailyGoalsAdapter extends ListAdapter<Goals, DailyGoalsAdapter.RecyclerItemViewHolder> {
 
     private List<Goals> filterGoalsList = new ArrayList<>();
     private List<Goals> goalList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.Rec
         LayoutInflater inflater = LayoutInflater.from(context);
 
 
-        View contactView = inflater.inflate(R.layout.weekly_goal_recycler_view, parent, false);
+        View contactView = inflater.inflate(R.layout.daily_goal_recycler_view, parent, false);
         return new DailyGoalsAdapter.RecyclerItemViewHolder(contactView);
     }
 
@@ -60,8 +60,8 @@ public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.Rec
         // Set movie data
         holder.bind(goals);
 
+
         holder.goalName.setText(goals.getGoalName());
-        holder.goalType.setText("/" + goals.getGoalAmount() + " " + goals.getGoalType2());
         holder.goalDone.setOnClickListener(v -> {
             holder.goalFailed.setChecked(false);
             // save goal
@@ -75,19 +75,15 @@ public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.Rec
             getItem(position).setGoalValueFinished("false");
             AppDatabase.getInstance(mContext).getGoalsDao().update(getItem(position));
         });
-        holder.goalAmount.setOnFocusChangeListener((v, hasFocus) -> {
-            if(!hasFocus){
-                if(!holder.goalAmount.getText().toString().matches("-?(0|[1-9]\\d*)")) {
-                    Toast.makeText(mContext, "Amount must be a numeric number", Toast.LENGTH_LONG).show();
-                }else{
-                    if(Integer.parseInt(holder.goalAmount.getText().toString()) > Integer.parseInt(getItem(position).getGoalAmount())){
-                        Toast.makeText(mContext, "Amount cannot be bigger than goal number", Toast.LENGTH_LONG).show();
-                    }else{
-                        getItem(position).setGoalValueFinished(holder.goalAmount.getText().toString());
-                        AppDatabase.getInstance(mContext).getGoalsDao().update(getItem(position));
-                    }
-                }
-            }
+
+        holder.goalNotes.setText(goals.getGoalNotes());
+        holder.itemView.setOnClickListener(v -> {
+            // Get the current state of the item
+            boolean expanded = goals.isExpanded();
+            // Change the state
+            goals.setExpanded(!expanded);
+            // Notify the adapter that item has changed
+            notifyItemChanged(position);
         });
     }
 
@@ -106,7 +102,7 @@ public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.Rec
         } else return 0;
     }
 
-    public void removeAt(int position){
+    public void removeAt(int position) {
         filterGoalsList.remove(position);
         notifyItemRemoved(position);
     }
@@ -121,30 +117,20 @@ public class DailyGoalsAdapter  extends ListAdapter<Goals, DailyGoalsAdapter.Rec
         TextView goalNotes;
         CheckBox goalDone;
         CheckBox goalFailed;
-        TextView goalType;
-        TextView goalAmount;
 
         RecyclerItemViewHolder(@NonNull View itemView) {
             super(itemView);
             goalName = itemView.findViewById(R.id.goal_name_recycler_view);
             goalDone = itemView.findViewById(R.id.goal_done_recycler_view);
             goalFailed = itemView.findViewById(R.id.goal_not_done_recycler_view);
-            goalType = itemView.findViewById(R.id.goal_amount_type_recycler_view);
-            goalAmount = itemView.findViewById(R.id.goaL_amount_input_recycler_view);
+            goalNotes = itemView.findViewById(R.id.goal_notes_recycler_view);
         }
 
         public void bind(Goals goals) {
-            if(goals.getGoalType1().equals("Checkbox")) {
-                goalType.setVisibility(View.GONE);
-                goalAmount.setVisibility(View.GONE);
-                goalFailed.setVisibility(View.VISIBLE);
-                goalDone.setVisibility(View.VISIBLE);
-            }else{
-                goalType.setVisibility(View.VISIBLE);
-                goalAmount.setVisibility(View.VISIBLE);
-                goalFailed.setVisibility(View.GONE);
-                goalDone.setVisibility(View.GONE);
-            }
+            // Get the state
+            boolean expanded = goals.isExpanded();
+            // Set the visibility based on state
+            goalNotes.setVisibility(expanded ? View.VISIBLE : View.GONE);
         }
     }
 }

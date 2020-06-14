@@ -9,11 +9,9 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +26,10 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
 import com.example.goaltracker.Util.LinedEditText;
-import com.example.goaltracker.Util.ListItemAddProg;
-import com.example.goaltracker.Util.Spinner2GoalAdapter;
-import com.example.goaltracker.Util.SpinnerGoalAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -53,8 +47,7 @@ public class DailyGoalsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private Dialog dialog;
-    private Spinner goalTypeSpinner1, goalTypeSpinner2;
-    private EditText goalName, goalDateFrom, goalDateTo, goalAmount;
+    private EditText goalName, goalDateFrom, goalDateTo;
     private TextView goalsTitleBar;
     private LinedEditText goalNotes;
     private ImageButton goalAdd, goalNextRight, goalPreviousLeft, goalDelete;
@@ -230,8 +223,8 @@ public class DailyGoalsFragment extends Fragment {
             goalDateFrom = dialog.findViewById(R.id.from_date_goal);
             goalDateTo = dialog.findViewById(R.id.to_date_goal);
             goalAdd = dialog.findViewById(R.id.goal_add);
-            goalAmount = dialog.findViewById(R.id.goal_amount);
             goalDelete = dialog.findViewById(R.id.goal_delete);
+            goalNotes = dialog.findViewById(R.id.linedEditText);
 
             goalDateFrom.setOnClickListener(v -> {
                 goalDateFrom.setText("");
@@ -263,125 +256,60 @@ public class DailyGoalsFragment extends Fragment {
                 datePickerDialog.show();
             });
 
-
-            // Declaring the Integer Array with resourse Id's of Images for the Spinners
-            ArrayList<ListItemAddProg> itemAddProgs = new ArrayList<>();
-            itemAddProgs.add(new ListItemAddProg("Goal Type", R.drawable.ic_log_type));
-            itemAddProgs.add(new ListItemAddProg("Checkbox", R.drawable.checkbox_spinner1_goal));
-            itemAddProgs.add(new ListItemAddProg("Time", R.drawable.time_spinner1_goal));
-            itemAddProgs.add(new ListItemAddProg("Count", R.drawable.amount_spinner1_goal));
-
-            // Setting a Custom Adapter to the Spinner
-            goalTypeSpinner1 = dialog.findViewById(R.id.goal_item_log_type_spinner_1);
-            goalTypeSpinner2 = dialog.findViewById(R.id.goal_item_log_type_spinner_2);
-
-            goalTypeSpinner1.setAdapter(new SpinnerGoalAdapter(getContext(), R.layout.spinner1_row_goal_type, itemAddProgs));
-            goalTypeSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                    if (id == 2) {
-                        ArrayList<String> logTypesSpinner2 = new ArrayList<>();
-                        logTypesSpinner2.add("Hours");
-                        logTypesSpinner2.add("Minutes");
-                        logTypesSpinner2.add("Seconds");
-                        goalTypeSpinner2.setVisibility(View.VISIBLE);
-                        goalTypeSpinner2.setAdapter(new Spinner2GoalAdapter(getContext(), R.layout.spinner2_row_goal_type, logTypesSpinner2));
-                        goalAmount.setVisibility(View.VISIBLE);
-                    } else if (id == 3) {
-                        ArrayList<String> logTypesSpinner2 = new ArrayList<>();
-                        logTypesSpinner2.add("Pcs");
-                        logTypesSpinner2.add("Pounds");
-                        logTypesSpinner2.add("Kgs");
-                        logTypesSpinner2.add("bits");
-                        logTypesSpinner2.add("slices");
-                        logTypesSpinner2.add("portions");
-                        logTypesSpinner2.add("parcels");
-                        logTypesSpinner2.add("%");
-                        goalTypeSpinner2 = dialog.findViewById(R.id.goal_item_log_type_spinner_2);
-                        goalTypeSpinner2.setVisibility(View.VISIBLE);
-                        goalTypeSpinner2.setAdapter(new Spinner2GoalAdapter(getContext(), R.layout.spinner2_row_goal_type, logTypesSpinner2));
-                        goalAmount.setVisibility(View.VISIBLE);
-                    } else if (id == 1) {
-                        goalTypeSpinner2.setVisibility(View.INVISIBLE);
-                        goalAmount.setVisibility(View.GONE);
-                    } else if (id == 0) {
-                        goalTypeSpinner2.setVisibility(View.INVISIBLE);
-                        goalAmount.setVisibility(View.GONE);
-                    }
-                }
-
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-
             goalDelete.setOnClickListener(v -> dialog.dismiss());
 
             goalAdd.setOnClickListener(v -> {
-        if (!"".contentEquals(goalName.getText()) && !goalTypeSpinner1.getSelectedItem().toString().equals("Type") && !"".contentEquals(goalDateFrom.getText())) {
-            if ((!goalDateFrom.getText().toString().matches("\\d{2}-\\d{2}-\\d{4}"))) {
-                Toast.makeText(getContext(), "Date must be in DD-MM-YYY format", Toast.LENGTH_LONG).show();
-            } else {
-                Goals goal = new Goals();
-                goal.setGoalValueFinished("");
-                goal.setGoalName(goalName.getText().toString());
-                ListItemAddProg listItemAddProg1 = (ListItemAddProg) goalTypeSpinner1.getSelectedItem();
-                goal.setGoalType1(listItemAddProg1.getName());
-                if (goalTypeSpinner2.getSelectedItem() != null) {
-                    goal.setGoalType2(goalTypeSpinner2.getSelectedItem().toString());
-                } else {
-                    goal.setGoalType2("");
-                }
-                goal.setGoalCategory("daily");
-
-                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-                Date date = null;
-                Date date1 = null;
-                try {
-                    if ("".contentEquals(goalDateTo.getText())) {
-                        Calendar startCalender = Calendar.getInstance();
-                        startCalender.setTime(Objects.requireNonNull(df.parse(goalDateFrom.getText().toString())));
-                        startCalender.add((Calendar.MONTH), 1);
-                        date1 = startCalender.getTime();
-                        date = df.parse(goalDateFrom.getText().toString());
+                if (!"".contentEquals(goalName.getText()) && !"".contentEquals(goalDateFrom.getText())) {
+                    if ((!goalDateFrom.getText().toString().matches("\\d{2}-\\d{2}-\\d{4}"))) {
+                        Toast.makeText(getContext(), "Date must be in DD-MM-YYY format", Toast.LENGTH_LONG).show();
                     } else {
-                        if ((!goalDateTo.getText().toString().matches("\\d{2}-\\d{2}-\\d{4}"))) {
-                            Toast.makeText(getContext(), "Date must be in DD-MM-YYY format", Toast.LENGTH_LONG).show();
-                        } else {
-                            date1 = df.parse(goalDateTo.getText().toString());
-                            date = df.parse(goalDateFrom.getText().toString());
+                        Goals goal = new Goals();
+                        goal.setGoalValueFinished("");
+                        goal.setGoalName(goalName.getText().toString());
+
+                        if ("".contentEquals(goalNotes.getText())) {
+                            goal.setGoalNotes("");
+                        }else{
+                            goal.setGoalNotes(goalNotes.getText().toString());
                         }
-                    }
-                    if (goalAmount.getVisibility() == View.VISIBLE) {
-                        if (goalAmount.getText().toString().matches("-?(0|[1-9]\\d*)")) {
-                            goal.setGoalAmount(goalAmount.getText().toString());
-                            if(date1.getTime() >= date.getTime()) {
+
+                        goal.setExpanded(false);
+                        goal.setGoalCategory("daily");
+
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+                        Date date = null;
+                        Date date1 = null;
+                        try {
+                            if ("".contentEquals(goalDateTo.getText())) {
+                                Calendar startCalender = Calendar.getInstance();
+                                startCalender.setTime(Objects.requireNonNull(df.parse(goalDateFrom.getText().toString())));
+                                startCalender.add((Calendar.MONTH), 1);
+                                date1 = startCalender.getTime();
+                                date = df.parse(goalDateFrom.getText().toString());
+                            } else {
+                                if ((!goalDateTo.getText().toString().matches("\\d{2}-\\d{2}-\\d{4}"))) {
+                                    Toast.makeText(getContext(), "Date must be in DD-MM-YYY format", Toast.LENGTH_LONG).show();
+                                } else {
+                                    date1 = df.parse(goalDateTo.getText().toString());
+                                    date = df.parse(goalDateFrom.getText().toString());
+                                }
+                            }
+                            if (date1.getTime() >= date.getTime()) {
                                 calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
                                 dialog.dismiss();
-                            }else{
+                            } else {
                                 Toast.makeText(getContext(), "end date must be in the future, not in the past", Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            Toast.makeText(getContext(), "Amount must be a numeric number", Toast.LENGTH_LONG).show();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                    } else {
-                        goal.setGoalAmount("");
-                        if(date1.getTime() >= date.getTime()) {
-                            calculateDaysBetweenEventsAndCreateThem(getContext(), date, date1, goal);
-                            dialog.dismiss();
-                        }else{
-                            Toast.makeText(getContext(), "end date must be in the future, not in the past", Toast.LENGTH_LONG).show();
-                        }
-
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                } else {
+                    Toast.makeText(getContext(), "Goal Name must not be empty and Starting date must be set", Toast.LENGTH_LONG).show();
                 }
-            }
-        } else {
-            Toast.makeText(getContext(), "Goal Name must not be empty, Goal type must be chosen and Starting date set", Toast.LENGTH_LONG).show();
-        }
 
-    });
-}
+            });
+        }
     }
 
     private static void calculateDaysBetweenEventsAndCreateThem(Context context, Date startDate, Date endDate, Goals goals) {
