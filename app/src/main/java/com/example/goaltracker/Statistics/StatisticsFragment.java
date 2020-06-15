@@ -1,5 +1,6 @@
 package com.example.goaltracker.Statistics;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -22,8 +22,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.goaltracker.Database.AppDatabase;
-import com.example.goaltracker.Goals.Goals;
 import com.example.goaltracker.R;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,6 +54,7 @@ public class StatisticsFragment extends Fragment {
 
     Spinner goalsType;
     MultiSpinner goalsSpecific;
+    BarChart mpBarChart;
 
     public StatisticsFragment() {
         // Required empty public constructor
@@ -93,6 +99,7 @@ public class StatisticsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         goalsSpecific = view.findViewById(R.id.multispinner);
+        mpBarChart = view.findViewById(R.id.statistics_bar_chart);
 
 
         Toolbar myToolbar = view.findViewById(R.id.toolbar_statistics_fragment);
@@ -114,6 +121,66 @@ public class StatisticsFragment extends Fragment {
         goalsType.setAdapter(adapter);
 
 
+        ArrayList<BarEntry> barEntryArrayList = new ArrayList<>();
+        barEntryArrayList.add(new BarEntry(1, 1000));
+        barEntryArrayList.add(new BarEntry(2, 212));
+        barEntryArrayList.add(new BarEntry(3, 1204));
+        barEntryArrayList.add(new BarEntry(4, 4556));
+        barEntryArrayList.add(new BarEntry(5, 12));
+        barEntryArrayList.add(new BarEntry(6, 444));
+
+        ArrayList<BarEntry> barEntryArrayList1 = new ArrayList<>();
+        barEntryArrayList.add(new BarEntry(1, 324));
+        barEntryArrayList.add(new BarEntry(2, 5235));
+        barEntryArrayList.add(new BarEntry(3, 234));
+        barEntryArrayList.add(new BarEntry(4, 345));
+        barEntryArrayList.add(new BarEntry(5, 6456));
+        barEntryArrayList.add(new BarEntry(6, 66));
+
+
+        ArrayList<BarEntry> barEntryArrayList2 = new ArrayList<>();
+        barEntryArrayList.add(new BarEntry(1, 63252));
+        barEntryArrayList.add(new BarEntry(2, 234234));
+        barEntryArrayList.add(new BarEntry(3, 53));
+        barEntryArrayList.add(new BarEntry(4, 534));
+        barEntryArrayList.add(new BarEntry(5, 534));
+        barEntryArrayList.add(new BarEntry(6, 44));
+
+        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Dataset 1");
+        barDataSet.setColor(Color.RED);
+
+        BarDataSet barDataSet2 = new BarDataSet(barEntryArrayList1, "Dataset 2");
+        barDataSet.setColor(Color.GREEN);
+
+        BarDataSet barDataSet3 = new BarDataSet(barEntryArrayList2, "Dataset 3");
+        barDataSet.setColor(Color.BLUE);
+
+        BarData barData = new BarData(barDataSet, barDataSet2, barDataSet3);
+        mpBarChart.setData(barData);
+
+        String[] days = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday"};
+        XAxis xAxis = mpBarChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
+        xAxis.setCenterAxisLabels(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1);
+        xAxis.setGranularityEnabled(true);
+
+        mpBarChart.setDragEnabled(true);
+        mpBarChart.setVisibleXRangeMaximum(3);
+
+        float barSpace = 0.08f;
+        float groupSpace = 0.44f;
+        barData.setBarWidth(0.10f);
+
+        mpBarChart.getXAxis().setAxisMinimum(0);
+        mpBarChart.getXAxis().setAxisMaximum(0+mpBarChart.getBarData().getGroupWidth(groupSpace,barSpace));
+        mpBarChart.getAxisLeft().setAxisMinimum(0);
+
+        mpBarChart.groupBars(0,groupSpace,barSpace);
+        mpBarChart.invalidate();
+
+
         // TODO: figure out why we are getting selected numebr of all items even if they are not selected
         goalsType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -123,9 +190,12 @@ public class StatisticsFragment extends Fragment {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getDailyGoalsNames();
                     goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected) {
+                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
+
+
                             Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
                             Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                            Log.d("tesrasds", " MULTI SPINNER: " + selected[1]);
                         }
                     });
 
@@ -135,7 +205,7 @@ public class StatisticsFragment extends Fragment {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getWeeklyGoalsNames();
                     goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected) {
+                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
                             Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
                             Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
                         }
@@ -147,7 +217,7 @@ public class StatisticsFragment extends Fragment {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getMonthlyGoalsNames();
                     goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected) {
+                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
                             Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
                             Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
                         }
@@ -160,7 +230,7 @@ public class StatisticsFragment extends Fragment {
 
                     goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected) {
+                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
                             Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
                             Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
                         }
