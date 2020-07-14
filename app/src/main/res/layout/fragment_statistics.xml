@@ -24,13 +24,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/multispinner"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_specific_goal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_statistics_fragment" />
 
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/statistics_bar_chart"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/statistics_pie_chart"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,8 +39,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_statistics_type" />
 
-    <com.example.goaltracker.Statistics.MultiSpinner
-        android:id="@+id/multispinner"
+    <Spinner
+        android:id="@+id/spinner_specific_goal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -48,8 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/spinner_statistics_type"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_statistics_fragment">
-
-    </com.example.goaltracker.Statistics.MultiSpinner>
+    </Spinner>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

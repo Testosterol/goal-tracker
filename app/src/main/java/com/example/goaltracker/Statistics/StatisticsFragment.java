@@ -1,6 +1,5 @@
 package com.example.goaltracker.Statistics;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,12 +22,16 @@ import android.widget.Spinner;
 
 import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,8 +56,8 @@ public class StatisticsFragment extends Fragment {
     private String mParam2;
 
     Spinner goalsType;
-    MultiSpinner goalsSpecific;
-    BarChart mpBarChart;
+    Spinner goalsSpecific;
+    PieChart mpPieChart;
 
     public StatisticsFragment() {
         // Required empty public constructor
@@ -98,8 +101,8 @@ public class StatisticsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        goalsSpecific = view.findViewById(R.id.multispinner);
-        mpBarChart = view.findViewById(R.id.statistics_bar_chart);
+        goalsSpecific = view.findViewById(R.id.spinner_specific_goal);
+        mpPieChart = view.findViewById(R.id.statistics_pie_chart);
 
 
         Toolbar myToolbar = view.findViewById(R.id.toolbar_statistics_fragment);
@@ -121,118 +124,110 @@ public class StatisticsFragment extends Fragment {
         goalsType.setAdapter(adapter);
 
 
-        ArrayList<BarEntry> barEntryArrayList = new ArrayList<>();
-        barEntryArrayList.add(new BarEntry(1, 1000));
-        barEntryArrayList.add(new BarEntry(2, 212));
-        barEntryArrayList.add(new BarEntry(3, 1204));
-        barEntryArrayList.add(new BarEntry(4, 4556));
-        barEntryArrayList.add(new BarEntry(5, 12));
-        barEntryArrayList.add(new BarEntry(6, 444));
-
-        ArrayList<BarEntry> barEntryArrayList1 = new ArrayList<>();
-        barEntryArrayList.add(new BarEntry(1, 324));
-        barEntryArrayList.add(new BarEntry(2, 5235));
-        barEntryArrayList.add(new BarEntry(3, 234));
-        barEntryArrayList.add(new BarEntry(4, 345));
-        barEntryArrayList.add(new BarEntry(5, 6456));
-        barEntryArrayList.add(new BarEntry(6, 66));
-
-
-        ArrayList<BarEntry> barEntryArrayList2 = new ArrayList<>();
-        barEntryArrayList.add(new BarEntry(1, 63252));
-        barEntryArrayList.add(new BarEntry(2, 234234));
-        barEntryArrayList.add(new BarEntry(3, 53));
-        barEntryArrayList.add(new BarEntry(4, 534));
-        barEntryArrayList.add(new BarEntry(5, 534));
-        barEntryArrayList.add(new BarEntry(6, 44));
-
-        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Dataset 1");
-        barDataSet.setColor(Color.RED);
-
-        BarDataSet barDataSet2 = new BarDataSet(barEntryArrayList1, "Dataset 2");
-        barDataSet.setColor(Color.GREEN);
-
-        BarDataSet barDataSet3 = new BarDataSet(barEntryArrayList2, "Dataset 3");
-        barDataSet.setColor(Color.BLUE);
-
-        BarData barData = new BarData(barDataSet, barDataSet2, barDataSet3);
-        mpBarChart.setData(barData);
-
-        String[] days = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday"};
-        XAxis xAxis = mpBarChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1);
-        xAxis.setGranularityEnabled(true);
-
-        mpBarChart.setDragEnabled(true);
-        mpBarChart.setVisibleXRangeMaximum(3);
-
-        float barSpace = 0.08f;
-        float groupSpace = 0.44f;
-        barData.setBarWidth(0.10f);
-
-        mpBarChart.getXAxis().setAxisMinimum(0);
-        mpBarChart.getXAxis().setAxisMaximum(0+mpBarChart.getBarData().getGroupWidth(groupSpace,barSpace));
-        mpBarChart.getAxisLeft().setAxisMinimum(0);
-
-        mpBarChart.groupBars(0,groupSpace,barSpace);
-        mpBarChart.invalidate();
-
-
         // TODO: figure out why we are getting selected numebr of all items even if they are not selected
         goalsType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Daily goals
-                if(position == 0){
+                if (position == 0) {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getDailyGoalsNames();
-                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, goals);
+                    //set the spinners adapter to the previously created one.
+                    goalsSpecific.setAdapter(adapter);
+                    goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String goalName = goalsSpecific.getSelectedItem().toString();
+                            Integer goalFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getDoneGoalsByName(goalName);
+                            Integer goalNotFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getNotDoneGoalsByName(goalName);
+
+                            ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
+
+                            NoOfEmp.add(new PieEntry(goalFinished, "Finished"));
+                            NoOfEmp.add(new PieEntry(goalNotFinished, "Not Finished"));
+
+                            PieDataSet dataSet = new PieDataSet(NoOfEmp, goalName);
+
+                            mpPieChart.setDrawHoleEnabled(true);
+                            mpPieChart.setCenterText(goalName);
+
+                            Description description = new Description();
+                            description.setText("Pie chart of all: " + goalName + " that has been finished or not finished");
+
+                            mpPieChart.setDescription(description);
+
+                            mpPieChart.setCenterTextSize(80);
+                            mpPieChart.setHoleRadius(50);
 
 
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected[1]);
+                            PieData data = new PieData(dataSet);
+                            mpPieChart.setData(data);
+                            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                            mpPieChart.animateXY(3000, 3000);
+
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
                         }
                     });
 
                 }
                 // Weekly goals
-                if(position == 1){
+                if (position == 1) {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getWeeklyGoalsNames();
-                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, goals);
+                    //set the spinners adapter to the previously created one.
+                    goalsSpecific.setAdapter(adapter);
+                    goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
                         }
                     });
 
                 }
                 // Monthly goals
-                if(position == 2){
+                if (position == 2) {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getMonthlyGoalsNames();
-                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, goals);
+                    //set the spinners adapter to the previously created one.
+                    goalsSpecific.setAdapter(adapter);
+                    goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
                         }
                     });
 
                 }
                 // Overall
-                if(position == 3){
+                if (position == 3) {
                     List<String> goals = AppDatabase.getInstance(getContext()).getGoalsDao().getAllGoalsNames();
-
-                    goalsSpecific.setItems(goals, "Select goals", new MultiSpinner.MultiSpinnerListener() {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, goals);
+                    //set the spinners adapter to the previously created one.
+                    goalsSpecific.setAdapter(adapter);
+                    goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
-                        public void onItemsSelected(boolean[] selected, List<String> selectedItems) {
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected.length);
-                            Log.d("tesrasds", " MULTI SPINNER: " + selected[0]);
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
                         }
                     });
 
@@ -244,7 +239,6 @@ public class StatisticsFragment extends Fragment {
 
             }
         });
-
 
 
     }

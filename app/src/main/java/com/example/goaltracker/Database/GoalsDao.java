@@ -42,5 +42,11 @@ public interface GoalsDao {
     @Query("SELECT goal_name FROM goals GROUP BY goal_name")
     List<String> getAllGoalsNames();
 
+    @Query("SELECT COUNT(goal_name) FROM goals where goal_value_finished == 'true' AND goal_name LIKE :name")
+    Integer getDoneGoalsByName(String name);
+
+    @Query("SELECT COUNT(goal_name) FROM goals where goal_value_finished == 'false' AND goal_name LIKE :name")
+    Integer getNotDoneGoalsByName(String name);
+
 
 }
