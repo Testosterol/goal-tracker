@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -141,28 +142,48 @@ public class StatisticsFragment extends Fragment {
                             Integer goalFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getDoneGoalsByName(goalName);
                             Integer goalNotFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getNotDoneGoalsByName(goalName);
 
+                            ValueFormatter vf = new ValueFormatter() { //value format here, here is the overridden method
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    return ""+(int)value;
+                                }
+                            };
+
                             ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
 
-                            NoOfEmp.add(new PieEntry(goalFinished, "Finished"));
-                            NoOfEmp.add(new PieEntry(goalNotFinished, "Not Finished"));
+                            if(goalFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalFinished, "Done"));
+                            }
+                            if(goalNotFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalNotFinished, "Failed"));
+                            }
 
                             PieDataSet dataSet = new PieDataSet(NoOfEmp, goalName);
+                            dataSet.setValueTextSize(25);
+                            dataSet.setValueFormatter(vf);
+
+
 
                             mpPieChart.setDrawHoleEnabled(true);
                             mpPieChart.setCenterText(goalName);
 
-                            Description description = new Description();
+                            /*Description description = new Description();
                             description.setText("Pie chart of all: " + goalName + " that has been finished or not finished");
-
                             mpPieChart.setDescription(description);
+                             */
 
-                            mpPieChart.setCenterTextSize(80);
+                            mpPieChart.getDescription().setEnabled(false);
+                            mpPieChart.getLegend().setEnabled(false);
+
+
+
+                            mpPieChart.setCenterTextSize(25);
                             mpPieChart.setHoleRadius(50);
 
 
                             PieData data = new PieData(dataSet);
                             mpPieChart.setData(data);
-                            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                            dataSet.setColors(ColorTemplate.PASTEL_COLORS);
                             mpPieChart.animateXY(3000, 3000);
 
 
@@ -184,6 +205,52 @@ public class StatisticsFragment extends Fragment {
                     goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String goalName = goalsSpecific.getSelectedItem().toString();
+                            Integer goalFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getDoneGoalsByName(goalName);
+                            Integer goalNotFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getNotDoneGoalsByName(goalName);
+
+                            ValueFormatter vf = new ValueFormatter() { //value format here, here is the overridden method
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    return ""+(int)value;
+                                }
+                            };
+
+                            ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
+
+                            if(goalFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalFinished, "Done"));
+                            }
+                            if(goalNotFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalNotFinished, "Failed"));
+                            }
+
+                            PieDataSet dataSet = new PieDataSet(NoOfEmp, goalName);
+                            dataSet.setValueTextSize(25);
+                            dataSet.setValueFormatter(vf);
+
+
+
+                            mpPieChart.setDrawHoleEnabled(true);
+                            mpPieChart.setCenterText(goalName);
+
+                            /*Description description = new Description();
+                            description.setText("Pie chart of all: " + goalName + " that has been finished or not finished");
+                            mpPieChart.setDescription(description);
+                             */
+
+                            mpPieChart.getDescription().setEnabled(false);
+                            mpPieChart.getLegend().setEnabled(false);
+
+
+                            mpPieChart.setCenterTextSize(25);
+                            mpPieChart.setHoleRadius(50);
+
+
+                            PieData data = new PieData(dataSet);
+                            mpPieChart.setData(data);
+                            dataSet.setColors(ColorTemplate.PASTEL_COLORS);
+                            mpPieChart.animateXY(3000, 3000);
 
                         }
 
@@ -203,6 +270,52 @@ public class StatisticsFragment extends Fragment {
                     goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String goalName = goalsSpecific.getSelectedItem().toString();
+                            Integer goalFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getDoneGoalsByName(goalName);
+                            Integer goalNotFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getNotDoneGoalsByName(goalName);
+
+                            ValueFormatter vf = new ValueFormatter() { //value format here, here is the overridden method
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    return ""+(int)value;
+                                }
+                            };
+
+                            ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
+
+                            if(goalFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalFinished, "Done"));
+                            }
+                            if(goalNotFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalNotFinished, "Failed"));
+                            }
+
+                            PieDataSet dataSet = new PieDataSet(NoOfEmp, goalName);
+                            dataSet.setValueTextSize(25);
+                            dataSet.setValueFormatter(vf);
+
+
+
+                            mpPieChart.setDrawHoleEnabled(true);
+                            mpPieChart.setCenterText(goalName);
+
+                            /*Description description = new Description();
+                            description.setText("Pie chart of all: " + goalName + " that has been finished or not finished");
+                            mpPieChart.setDescription(description);
+                             */
+
+                            mpPieChart.getDescription().setEnabled(false);
+                            mpPieChart.getLegend().setEnabled(false);
+
+
+                            mpPieChart.setCenterTextSize(25);
+                            mpPieChart.setHoleRadius(50);
+
+
+                            PieData data = new PieData(dataSet);
+                            mpPieChart.setData(data);
+                            dataSet.setColors(ColorTemplate.PASTEL_COLORS);
+                            mpPieChart.animateXY(3000, 3000);
 
                         }
 
@@ -222,6 +335,51 @@ public class StatisticsFragment extends Fragment {
                     goalsSpecific.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String goalName = goalsSpecific.getSelectedItem().toString();
+                            Integer goalFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getDoneGoalsByName(goalName);
+                            Integer goalNotFinished = AppDatabase.getInstance(getContext()).getGoalsDao().getNotDoneGoalsByName(goalName);
+
+                            ValueFormatter vf = new ValueFormatter() { //value format here, here is the overridden method
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    return ""+(int)value;
+                                }
+                            };
+
+                            ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
+
+                            if(goalFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalFinished, "Done"));
+                            }
+                            if(goalNotFinished > 0) {
+                                NoOfEmp.add(new PieEntry(goalNotFinished, "Failed"));
+                            }
+                            PieDataSet dataSet = new PieDataSet(NoOfEmp, goalName);
+                            dataSet.setValueTextSize(25);
+                            dataSet.setValueFormatter(vf);
+
+
+
+                            mpPieChart.setDrawHoleEnabled(true);
+                            mpPieChart.setCenterText(goalName);
+
+                            /*Description description = new Description();
+                            description.setText("Pie chart of all: " + goalName + " that has been finished or not finished");
+                            mpPieChart.setDescription(description);
+                             */
+
+                            mpPieChart.getDescription().setEnabled(false);
+                            mpPieChart.getLegend().setEnabled(false);
+
+
+                            mpPieChart.setCenterTextSize(25);
+                            mpPieChart.setHoleRadius(50);
+
+
+                            PieData data = new PieData(dataSet);
+                            mpPieChart.setData(data);
+                            dataSet.setColors(ColorTemplate.PASTEL_COLORS);
+                            mpPieChart.animateXY(3000, 3000);
 
                         }
 

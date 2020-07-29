@@ -101,9 +101,8 @@ public class MainFragment extends Fragment {
 
         Toolbar myToolbar = view.findViewById(R.id.toolbar_main_fragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(myToolbar);
-
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle("");
-        setHasOptionsMenu(true);
+
 
         todoListButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_toDoListFragment));
         goalsButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_goalsFragment));
@@ -116,16 +115,4 @@ public class MainFragment extends Fragment {
 
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NotNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.action_bar_main_screen, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {// Not implemented here
-            Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_settingsFragment);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

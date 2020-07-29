@@ -23,7 +23,8 @@
         android:id="@+id/spinner_statistics_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:ellipsize="marquee"
+        android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/spinner_specific_goal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_statistics_fragment" />
@@ -43,12 +44,12 @@
         android:id="@+id/spinner_specific_goal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:prompt="@string/app_name"
+        android:ellipsize="marquee"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/spinner_statistics_type"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_statistics_fragment">
-    </Spinner>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_statistics_fragment"></Spinner>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
