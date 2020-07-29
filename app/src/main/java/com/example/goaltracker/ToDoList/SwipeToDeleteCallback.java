@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -21,7 +21,7 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     Context mContext;
     private Paint mClearPaint;
-    private ColorDrawable mBackground;
+    private GradientDrawable mBackground;
     private int backgroundColor;
     private Drawable deleteDrawable;
     private int intrinsicWidth;
@@ -30,8 +30,8 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     SwipeToDeleteCallback(Context context) {
         mContext = context;
-        mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#b80f0a");
+        mBackground = new GradientDrawable();
+        backgroundColor = Color.parseColor("#ff0000");
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp);
@@ -69,6 +69,7 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
         mBackground.setColor(backgroundColor);
         mBackground.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+        mBackground.setCornerRadius(20);
         mBackground.draw(c);
 
         int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;

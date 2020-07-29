@@ -24,6 +24,7 @@
             android:layout_marginRight="135dp"
             android:layout_marginBottom="8dp"
             android:text="@string/title"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/toDoListRecyclerViewNotes"
             app:layout_constraintEnd_toStartOf="@+id/toDoListRecyclerViewDate"
             app:layout_constraintStart_toStartOf="parent"
