@@ -1,7 +1,5 @@
-package com.example.goaltracker.Settings;
+package com.example.goaltracker;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,23 +12,16 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
-
-import com.example.goaltracker.R;
-
-import org.w3c.dom.Text;
 
 import java.util.Objects;
 
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SettingsFragment#newInstance} factory method to
+ * Use the {@link FaqFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class FaqFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,12 +30,8 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView faq;
-    private TextView about;
-    private TextView contact;
-    private Switch vibrateSwitch;
 
-    public SettingsFragment() {
+    public FaqFragment() {
         // Required empty public constructor
     }
 
@@ -54,11 +41,11 @@ public class SettingsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
+     * @return A new instance of fragment FaqFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
+    public static FaqFragment newInstance(String param1, String param2) {
+        FaqFragment fragment = new FaqFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -79,50 +66,20 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        return inflater.inflate(R.layout.fragment_faq, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toolbar myToolbar = view.findViewById(R.id.toolbar_settings_fragment);
+        Toolbar myToolbar = view.findViewById(R.id.toolbar_faq_fragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(myToolbar);
+
         myToolbar.setNavigationOnClickListener(v -> Navigation.findNavController(requireView()).popBackStack());
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowHomeEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(true);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle("");
-
-        faq = view.findViewById(R.id.settings_faq_tv);
-        contact = view.findViewById(R.id.settings_contact_tv);
-        about = view.findViewById(R.id.settings_about_tv);
-        vibrateSwitch = view.findViewById(R.id.switch1);
-
-        faq.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_faqFragment));
-
-        contact.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_contactFragment));
-
-        about.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_aboutFragment));
-
-        SharedPreferences preferences = requireContext().getSharedPreferences("goal_tracker_identifier", Context.MODE_PRIVATE);
-        if(preferences.getBoolean("vibration_goal_tracker", false)){
-            vibrateSwitch.setChecked(true);
-        }else{
-            vibrateSwitch.setChecked(false);
-        }
-
-        vibrateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // do something, the isChecked will be
-            // true if the switch is in the On position
-            SharedPreferences.Editor editor = preferences.edit();
-            if(isChecked){
-                editor.putBoolean("vibration_goal_tracker", true);
-            }else{
-                editor.putBoolean("vibration_goal_tracker", false);
-            }
-            editor.commit();
-        });
-
     }
 }

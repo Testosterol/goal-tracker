@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,6 +69,7 @@ public class ToDoListFragment extends Fragment {
     private LinedEditText toDoListNotes;
     private int mYear, mMonth, mDay;
     private ToDoListViewModel toDoListViewModel;
+    private boolean vibrate;
 
 
     public ToDoListFragment() {
@@ -147,6 +151,19 @@ public class ToDoListFragment extends Fragment {
                 snackbar.setActionTextColor(Color.YELLOW);
                 snackbar.show();
 
+                SharedPreferences preferences = mContext.getSharedPreferences("goal_tracker_identifier", Context.MODE_PRIVATE);
+                if(preferences.getBoolean("vibration_goal_tracker", false)){
+                    Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (vibrator != null) {
+                            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                        }
+                    }else{
+                        if (vibrator != null) {
+                            vibrator.vibrate(200);
+                        }
+                    }
+                }
             }
         };
 

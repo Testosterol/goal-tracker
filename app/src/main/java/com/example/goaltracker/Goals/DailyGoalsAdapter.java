@@ -1,6 +1,10 @@
 package com.example.goaltracker.Goals;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,12 +72,40 @@ public class DailyGoalsAdapter extends ListAdapter<Goals, DailyGoalsAdapter.Recy
             getItem(position).setGoalValueFinished("true");
             AppDatabase.getInstance(mContext).getGoalsDao().update(getItem(position));
 
+            SharedPreferences preferences = mContext.getSharedPreferences("goal_tracker_identifier", Context.MODE_PRIVATE);
+            if(preferences.getBoolean("vibration_goal_tracker", false)){
+                Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (vibrator != null) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                    }
+                }else{
+                    if (vibrator != null) {
+                        vibrator.vibrate(200);
+                    }
+                }
+            }
+
         });
         holder.goalFailed.setOnClickListener(v -> {
             holder.goalDone.setChecked(false);
             // save goal
             getItem(position).setGoalValueFinished("false");
             AppDatabase.getInstance(mContext).getGoalsDao().update(getItem(position));
+
+            SharedPreferences preferences = mContext.getSharedPreferences("goal_tracker_identifier", Context.MODE_PRIVATE);
+            if(preferences.getBoolean("vibration_goal_tracker", false)){
+                Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (vibrator != null) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                    }
+                }else{
+                    if (vibrator != null) {
+                        vibrator.vibrate(200);
+                    }
+                }
+            }
         });
 
         holder.goalNotes.setText(goals.getGoalNotes());
