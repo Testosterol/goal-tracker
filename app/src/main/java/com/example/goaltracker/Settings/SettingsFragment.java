@@ -1,7 +1,9 @@
 package com.example.goaltracker.Settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -101,14 +103,19 @@ public class SettingsFragment extends Fragment {
 
         faq.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_faqFragment));
 
-        contact.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_contactFragment));
+        contact.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
+            intent.setData(Uri.parse("mailto:denistreb@gmail.com")); // TODO: CHANGE EMAIL
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+            startActivity(intent);
+        });
 
         about.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_aboutFragment));
 
         SharedPreferences preferences = requireContext().getSharedPreferences("goal_tracker_identifier", Context.MODE_PRIVATE);
-        if(preferences.getBoolean("vibration_goal_tracker", false)){
+        if (preferences.getBoolean("vibration_goal_tracker", false)) {
             vibrateSwitch.setChecked(true);
-        }else{
+        } else {
             vibrateSwitch.setChecked(false);
         }
 
@@ -116,9 +123,9 @@ public class SettingsFragment extends Fragment {
             // do something, the isChecked will be
             // true if the switch is in the On position
             SharedPreferences.Editor editor = preferences.edit();
-            if(isChecked){
+            if (isChecked) {
                 editor.putBoolean("vibration_goal_tracker", true);
-            }else{
+            } else {
                 editor.putBoolean("vibration_goal_tracker", false);
             }
             editor.commit();

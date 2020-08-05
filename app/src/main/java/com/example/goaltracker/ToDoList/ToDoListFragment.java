@@ -9,6 +9,17 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,19 +33,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
-
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.goaltracker.Database.AppDatabase;
 import com.example.goaltracker.R;
@@ -249,6 +247,7 @@ public class ToDoListFragment extends Fragment {
             toDoListNotes = dialog.findViewById(R.id.toDoListNotes);
             ImageButton addToDoListItem = dialog.findViewById(R.id.toDoListAdd);
             toDoListTime = dialogView.findViewById(R.id.toDoListTime);
+            ImageButton deleteToDoListItem = dialog.findViewById(R.id.toDoListDelete);
 
             toDoListDate.setFocusable(false);
             toDoListDate.setClickable(true);
@@ -282,6 +281,8 @@ public class ToDoListFragment extends Fragment {
             addToDoListItem.setFocusable(false);
             addToDoListItem.setClickable(true);
 
+            deleteToDoListItem.setOnClickListener(v -> dialog.dismiss());
+
             addToDoListItem.setOnClickListener(v -> {
                 // add to db ?
                 if (!toDoListTitle.getText().toString().equals("")) {
@@ -300,6 +301,7 @@ public class ToDoListFragment extends Fragment {
 
 
             });
+
         }
     }
 
